@@ -249,12 +249,39 @@
     header p { font-size: .98rem; }
   }
 </style>
+
+<style>
+  /* ===== refined: calmer bordeaux ===== */
+  body { background: #3d0c19; background-attachment: scroll; }
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background: radial-gradient(900px 500px at 50% -20%, rgba(255,255,255,.06), transparent 70%); }
+  .sparkles i { width: 2px; height: 2px; box-shadow: 0 0 4px 1px rgba(241,223,179,.35); }
+  .sparkles i.star { display: none; }
+  @keyframes twinkle { 0%,100% { opacity: 0; } 50% { opacity: .55; } }
+  header h1 { font-style: normal; font-weight: 500; animation: none; background: none; color: #f6ead8; -webkit-background-clip: initial; background-clip: initial; letter-spacing: .01em; }
+  .kicker { color: rgba(246,234,216,.6); letter-spacing: .28em; font-size: .72rem; }
+  .divider { width: 48px; background: rgba(216,180,106,.6); }
+  .divider::after { content: none; }
+  .note { background: transparent; border: 1px solid rgba(246,234,216,.18); color: rgba(246,234,216,.75); backdrop-filter: none; }
+  .filters button { background: transparent; border-color: rgba(246,234,216,.22); color: rgba(246,234,216,.85); }
+  .filters button:hover { border-color: rgba(246,234,216,.5); }
+  .filters button.on { background: #f6ead8; color: #3d0c19; border-color: #f6ead8; }
+  li.item { border: 0; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.25); background: #fcf8f3; }
+  li.item:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.3); }
+  .pic { border-bottom: 1px solid #eee4da; }
+  .pic .tag { background: rgba(255,255,255,.9); color: #5a0f22; border: 1px solid #eadbd0; font-weight: 500; }
+  .name { color: #2b1118; }
+  button.claim { background: #5a0f22; border: 0; color: #fcf8f3; }
+  button.claim:hover { background: #6e1430; box-shadow: none; }
+  .status { background: #f3e9e4; color: #5a0f22; border: 0; }
+  dialog { border: 0; }
+</style>
 </head>
 <body>
 <div class="sparkles" id="sparkles"></div>
 <div class="wrap">
   <header>
-    <div class="kicker">✦ Katja's ✦</div>
+    <div class="kicker">Katja's</div>
     <h1 id="title">Wishlist</h1>
     <div class="divider"></div>
     <p id="intro">A few things I'd love. If you're getting me something, tap "I'll get this" so nobody else buys the same gift. Thank you!</p>
@@ -290,7 +317,7 @@ const ITEMS = [
   { id: "jysk", logo: "https://jysk.nl/themes/custom/jysk_bootstrap/icons/static/jysk-logo.svg", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "Sent as a PDF, from €15. For cozy home upgrades (and probably too many candles).", tag: "Gift card", multi: true },
   { id: "straps", img: "https://m.media-amazon.com/images/I/81wyTzt1trL._AC_SX679_.jpg", emoji: "🏋️‍♀️", name: "Lifting straps / wrist wraps for the gym", price: "€14.99", link: "https://www.amazon.nl/dp/B0CQT32FNM", note: "A similar pair is great too. Helps me pretend I lift heavier than I do.", tag: "Gym" },
   { id: "studio-release", fit: "cover", img: "https://studiorelease.nl/wp-content/smush-webp/2026/02/studio-release-professionele-massage-480x600.jpg.webp", brand: "Studio Release", emoji: "💆‍♀️", gc: "#8f7a72", name: "Studio Release massage voucher (Utrecht)", price: "Massages from €69.50", link: "https://studiorelease.nl/massage/cadeaubon/", note: "Digital or physical voucher. Your gift: one extremely relaxed me.", tag: "Gift card", multi: true },
-  { id: "blender", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MP_179198784/fee_786_587_png", emoji: "🥤", name: "Blender for smoothies and soup (Bosch VitaPower MMB6172S)", price: "€106", link: "https://www.mediamarkt.nl/nl/product/_bosch-vitapower-serie-4-mmb6172s-blender-zilver-99586352.html", note: "Heat-safe glass jug, so it does hot soup too. Smoothies in summer, soup in winter.", tag: "Kitchen" },
+  { id: "blender", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_148824113/fee_786_587_png", emoji: "🥤", name: "Blender (Philips Series 3000 HR2041/41)", price: "€36 (was €43.99)", link: "https://www.mediamarkt.nl/nl/product/_philips-hr204141-1877332.html", note: "For smoothies and soups. Healthy era starts now (mostly).", tag: "Kitchen" },
   { id: "hairdryer", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_134471770/fee_786_587_png", emoji: "💇‍♀️", name: "Hair dryer with a diffuser (Remington One Dry & Style D6077)", price: "€41.99", link: "https://www.mediamarkt.nl/nl/product/_remington-one-dry-and-style-d6077-1799374.html", note: "With a diffuser, for the curls. They've been asking for it.", tag: "Beauty" },
   { id: "heuvelrug-horses", fit: "cover", img: "https://heuvelrughorses.nl/wp-content/uploads/2026/02/PHOTO-2026-02-18-19-43-38-5.jpg", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Heuvelrug Horses gift card (horse riding, Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "A guided ride through the forest. Yes, there will be photos.", tag: "Gift card", multi: true },
   { id: "desenio", img: "https://media.desenio.com/site_images/giftcard_white-large-nl.jpg?auto=compress,format&fit=max&w=800", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "Sent by email, from €10. My walls are looking a little naked.", tag: "Gift card", multi: true },
@@ -371,8 +398,8 @@ const TAG_COLORS = {
 };
 
 function confetti() {
-  const colors = ["#d8b46a","#f1dfb3","#7a1630","#fff4d6","#c99a45"];
-  for (let i = 0; i < 50; i++) {
+  const colors = ["#d8b46a","#f6ead8","#7a1630","#c9a0a8"];
+  for (let i = 0; i < 36; i++) {
     const d = document.createElement("div");
     d.className = "confetti";
     d.style.left = Math.random() * 100 + "vw";
@@ -389,7 +416,7 @@ function confetti() {
 // sparkles
 (() => {
   const box = document.getElementById("sparkles");
-  const n = window.innerWidth < 600 ? 22 : 40;
+  const n = window.innerWidth < 600 ? 10 : 18;
   for (let i = 0; i < n; i++) {
     const el = document.createElement("i");
     if (i % 4 === 0) el.className = "star";
@@ -447,7 +474,7 @@ function render() {
     li.innerHTML = `${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}<div class="right">${right}</div></div>`;
     listEl.appendChild(li);
   });
-  if (!listEl.children.length) listEl.innerHTML = `<li class="empty">Nothing left here, everything is taken ✨</li>`;
+  if (!listEl.children.length) listEl.innerHTML = `<li class="empty">Nothing left here, everything is taken</li>`;
 }
 
 const dlg = document.getElementById("dlg");
