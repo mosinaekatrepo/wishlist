@@ -5,276 +5,142 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Wishlist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f6f3ee;
-    --card: #ffffff;
-    --ink: #24211e;
-    --muted: #807870;
-    --accent: #2f3e36;
-    --accent-dark: #1f2a24;
-    --done: #4f7a5a;
-    --done-soft: #e8efe8;
-    --line: #e6e0d7;
+    --bg: #2b0a13; --bg2: #4a0f20; --wine: #6b1430; --wine-2: #82193b;
+    --cream: #fbf6f0; --paper: #ffffff; --ink: #1f1216; --muted: #7b6a6f;
+    --gold: #e2c38a; --line: rgba(31,18,22,.08);
+    --radius: 22px;
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
-    margin: 0;
-    font-family: Inter, system-ui, sans-serif;
-    color: var(--ink);
-    line-height: 1.5;
-    min-height: 100vh;
-    background: var(--bg);
+    margin: 0; min-height: 100vh; color: var(--ink);
+    font-family: Manrope, system-ui, -apple-system, sans-serif; line-height: 1.5;
+    background:
+      radial-gradient(1000px 520px at 15% -10%, rgba(176,40,80,.35), transparent 60%),
+      radial-gradient(900px 600px at 110% 20%, rgba(120,20,50,.45), transparent 60%),
+      linear-gradient(180deg, var(--bg2) 0%, var(--bg) 55%, #1d060c 100%);
+    background-attachment: fixed;
     overflow-x: hidden;
   }
-  /* floating background emoji */
-  .floaters { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .floaters span {
-    position: absolute; bottom: -60px; font-size: 28px; opacity: .35;
-    animation: floatUp linear infinite;
-  }
-  @keyframes floatUp {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(-115vh) rotate(260deg); }
-  }
-  @media (prefers-reduced-motion: reduce) { .floaters { display: none; } }
 
-  .wrap { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 48px 20px 80px; }
-  header { text-align: center; }
-  .bigbow { display: none; }
-  @keyframes wiggle { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg) scale(1.06); } }
+  /* sparkles */
+  .sparkles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .sparkles i { position: absolute; display: block; opacity: 0; animation: twinkle ease-in-out infinite; }
+  .sparkles i svg { display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 6px rgba(226,195,138,.85)); }
+  .sparkles i.dot { width: 3px !important; height: 3px !important; border-radius: 50%; background: #f5e6c4; box-shadow: 0 0 8px 2px rgba(226,195,138,.6); }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1) rotate(45deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { .sparkles i { animation: none; opacity: .5; } }
+
+  .wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 72px 20px 96px; }
+
+  /* hero */
+  header { text-align: center; color: var(--cream); margin-bottom: 36px; }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: .74rem; font-weight: 700; letter-spacing: .32em; text-transform: uppercase; color: var(--gold);
+  }
+  .kicker::before, .kicker::after { content: ""; width: 28px; height: 1px; background: currentColor; opacity: .6; }
   header h1 {
-    font-family: Fraunces, Georgia, serif; font-weight: 600;
-    font-size: clamp(2.4rem, 7vw, 3.6rem);
-    margin: 4px 0 10px; line-height: 1.05; letter-spacing: -0.02em;
+    margin: 14px 0 14px; font-weight: 800; letter-spacing: -.045em; line-height: .95;
+    font-size: clamp(3.2rem, 12vw, 6.4rem);
+    background: linear-gradient(180deg, #fff 0%, #f3e3cf 60%, #d9b98a 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  header p { margin: 0 auto; color: var(--muted); max-width: 56ch; font-size: 1.05rem; }
+  header p { margin: 0 auto; max-width: 50ch; color: rgba(251,246,240,.72); font-size: 1.04rem; }
+  .divider { display: none; }
   .note {
-    margin: 24px auto 8px; max-width: 560px; text-align: center;
-    padding: 10px 16px; background: #fff; border: 1px solid var(--line);
-    border-radius: 12px; font-size: 0.9rem; color: var(--muted);
+    margin: 22px auto 0; max-width: 520px; display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 12px 18px; border-radius: 999px; font-size: .88rem; color: rgba(251,246,240,.85);
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   }
-  .note.demo { background: #fbf6e8; }
-  .filters { display: flex; gap: 8px; margin: 24px 0 20px; flex-wrap: wrap; justify-content: center; }
-  .filters button {
-    border: 1px solid var(--line); background: #fff; color: var(--ink);
-    padding: 7px 16px; border-radius: 999px; font: inherit; font-weight: 500; font-size: 0.92rem; cursor: pointer;
-    transition: transform .15s;
-  }
-  .filters button:hover { transform: translateY(-2px); }
-  .filters button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .note.demo { background: rgba(255,214,107,.12); }
 
-  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+  /* grid */
+  ul#list { list-style: none; padding: 0; margin: 40px 0 0; display: grid; gap: 22px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  @media (max-width: 960px) { ul#list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 620px) { ul#list { grid-template-columns: 1fr; gap: 16px; } .wrap { padding: 48px 16px 72px; } }
+
   li.item {
-    background: var(--card); border-radius: 16px; overflow: hidden;
-    border: 1px solid var(--line);
-    display: flex; flex-direction: column;
-    transition: transform .2s, box-shadow .2s;
-    animation: pop .4s ease-out both;
+    position: relative; display: flex; flex-direction: column; overflow: hidden;
+    background: var(--paper); border-radius: var(--radius);
+    box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 20px 50px -20px rgba(0,0,0,.55);
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
+    opacity: 0; transform: translateY(18px);
   }
-  li.item:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.06); }
-  @keyframes pop { from { opacity: 0; transform: translateY(8px); } }
+  li.item.in { opacity: 1; transform: none; }
+  li.item.in:hover { transform: translateY(-6px); box-shadow: 0 30px 60px -24px rgba(0,0,0,.6); }
+  li.item::after { /* gold hairline on hover */
+    content: ""; position: absolute; inset: 0; border-radius: var(--radius); pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(226,195,138,0); transition: box-shadow .35s;
+  }
+  li.item:hover::after { box-shadow: inset 0 0 0 1px rgba(226,195,138,.9); }
 
   .pic {
-    position: relative; height: 170px; overflow: hidden; display: grid; place-items: center;
-    background: var(--g, #ece6dc);
+    position: relative; margin: 10px 10px 0; height: 220px; border-radius: 16px; overflow: hidden;
+    background: #f6f2ee; display: grid; place-items: center;
   }
-  .pic .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; padding: 10px; z-index: 1; transition: transform .4s; }
-  li.item:hover .pic .photo { transform: scale(1.04); }
-  .pic .tag, .pic .stamp { z-index: 2; }
-  .pic .photo.logo { padding: 36px 48px; }
-  .pic .emoji { font-size: 60px; transition: transform .3s; }
-  li.item:hover .pic .emoji { transform: scale(1.08); }
+  .pic .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 18px; z-index: 1; transition: transform .6s cubic-bezier(.2,.8,.2,1); mix-blend-mode: multiply; }
+  .pic .photo.logo { padding: 54px 44px; mix-blend-mode: normal; }
+  li.item:hover .pic .photo { transform: scale(1.05); }
+  .pic .emoji { font-size: 56px; }
   .pic .sparkle { display: none; }
-  .pic .sparkle.s1 { top: 14px; left: 18px; } .pic .sparkle.s2 { bottom: 16px; right: 20px; }
   .pic .tag {
-    position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,.8);
-    padding: 2px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 500; color: var(--ink);
+    position: absolute; top: 12px; left: 12px; z-index: 2;
+    padding: 5px 10px; border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--wine); background: rgba(255,255,255,.85); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(107,20,48,.12);
   }
-  /* gift-card look */
-  .pic.gc { align-content: center; }
-  .pic.gc .card {
-    width: 78%; height: 100px; border-radius: 14px; padding: 12px 14px; color: #fff;
-    background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,0)), var(--gc, #555);
-    box-shadow: 0 8px 18px rgba(0,0,0,.14); transform: rotate(-3deg);
-    display: flex; flex-direction: column; justify-content: space-between; transition: transform .3s;
-  }
-  li.item:hover .pic.gc .card { transform: rotate(0deg); }
-  .pic.gc .brand { font-family: Fraunces, Georgia, serif; font-size: 1.3rem; font-weight: 600; line-height: 1.1; }
-  .pic.gc .row2 { display: flex; justify-content: space-between; align-items: end; font-size: .68rem; font-weight: 600; letter-spacing: .1em; opacity: .9; }
-  .pic.gc .row2 .e { font-size: 22px; letter-spacing: 0; opacity: .9; }
+  .pic.gc .card { width: 76%; height: 110px; border-radius: 14px; padding: 14px; color: #fff; background: var(--gc, #555); display: flex; flex-direction: column; justify-content: space-between; }
+  .pic.gc .brand { font-weight: 800; font-size: 1.3rem; }
+  .pic.gc .row2 { display: flex; justify-content: space-between; font-size: .68rem; font-weight: 700; letter-spacing: .12em; }
 
-  .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-  .name { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 1.1rem; line-height: 1.25; }
-  .meta { color: var(--muted); font-size: 0.9rem; }
-  .price { font-weight: 600; color: var(--ink); }
-  .meta a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration: none; }
-  .meta a:hover { text-decoration: underline; }
-  .noteline { font-size: 0.88rem; color: var(--muted); }
-  .right { margin-top: auto; padding-top: 6px; }
+  .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .name { font-weight: 700; font-size: 1.08rem; line-height: 1.3; letter-spacing: -.01em; color: var(--ink); }
+  .meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: .9rem; }
+  .meta .price { font-weight: 700; color: var(--wine); }
+  .meta a {
+    display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px;
+    font-weight: 600; font-size: .8rem; color: var(--ink); text-decoration: none; background: #f4eeea; transition: background .2s;
+  }
+  .meta a:hover { background: #ebe1db; }
+  .noteline { font-size: .9rem; color: var(--muted); }
+  .right { margin-top: auto; padding-top: 10px; }
   button.claim {
-    width: 100%; border: 0; background: var(--accent); color: #fff; font: inherit; font-weight: 600; font-size: .95rem;
-    padding: 11px 16px; border-radius: 10px; cursor: pointer;
-    transition: transform .1s, box-shadow .1s;
+    width: 100%; border: 0; cursor: pointer; font: inherit; font-weight: 700; font-size: .95rem; letter-spacing: .01em;
+    padding: 13px 16px; border-radius: 14px; color: #fff;
+    background: linear-gradient(135deg, var(--wine-2), var(--wine));
+    box-shadow: 0 8px 20px -10px rgba(107,20,48,.8); transition: transform .15s, box-shadow .2s, filter .2s;
   }
-  button.claim:hover { transform: translateY(-1px); }
-  button.claim:active { transform: translateY(1px); }
-  button.claim:hover { background: var(--accent-dark); }
-  .status {
-    display: block; background: var(--done-soft); color: var(--done); text-align: center;
-    font-weight: 600; font-size: 0.9rem; padding: 9px 12px; border-radius: 10px;
-  }
-  .undo { display: block; margin: 8px auto 0; font-size: 0.82rem; color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline; padding: 0; font-family: inherit; }
-
-  li.item.claimed .pic { filter: grayscale(.7); opacity: .75; }
-  li.item.claimed .name { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--muted); }
-  .stamp {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-12deg);
-    background: #fff; color: var(--done); border: 2px solid var(--done); border-radius: 8px;
-    padding: 3px 12px; font-family: Inter, sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: .04em;
-  }
-
-  footer { margin-top: 44px; color: var(--muted); font-size: 0.85rem; text-align: center; }
+  button.claim:hover { filter: brightness(1.08); box-shadow: 0 12px 26px -10px rgba(107,20,48,.9); }
+  button.claim:active { transform: scale(.98); }
+  .status { display: block; text-align: center; font-weight: 700; font-size: .9rem; padding: 11px 12px; border-radius: 14px; color: var(--wine); background: #f7ecef; }
+  .undo { display: block; margin: 8px auto 0; background: none; border: 0; cursor: pointer; font: inherit; font-size: .82rem; color: var(--muted); text-decoration: underline; }
+  li.item.claimed .pic { filter: grayscale(.4); }
+  .stamp { position: absolute; z-index: 2; left: 50%; top: 50%; transform: translate(-50%,-50%) rotate(-8deg); background: #fff; color: var(--wine); border: 2px solid var(--wine); border-radius: 10px; padding: 4px 12px; font-weight: 800; letter-spacing: .08em; }
+  .empty { grid-column: 1/-1; text-align: center; color: rgba(251,246,240,.75); padding: 40px 0; }
 
   dialog {
-    border: 0; border-radius: 16px; padding: 26px; max-width: 380px; width: 90%; text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,.2); font-family: Inter, sans-serif; color: var(--ink);
+    border: 0; border-radius: 24px; padding: 28px; width: min(92vw, 400px); text-align: center; color: var(--ink);
+    font-family: Manrope, sans-serif; box-shadow: 0 30px 80px rgba(0,0,0,.45);
   }
-  dialog::backdrop { background: rgba(36,33,30,.4); }
-  dialog .dlgEmoji { font-size: 44px; }
-  dialog h2 { font-family: Fraunces, Georgia, serif; margin: 4px 0 6px; font-size: 1.5rem; }
-  dialog p { margin: 0 0 16px; color: var(--muted); font-size: 0.95rem; }
-  dialog input {
-    width: 100%; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px; font: inherit; margin-bottom: 16px;
-  }
-  dialog input:focus { outline: none; border-color: var(--ink); }
-  .row { display: flex; gap: 8px; justify-content: center; }
-  .row button { font: inherit; font-weight: 500; padding: 10px 18px; border-radius: 10px; cursor: pointer; border: 1px solid var(--line); background: #fff; }
-  .row button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  dialog::backdrop { background: rgba(20,4,9,.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  dialog .dlgEmoji { font-size: 42px; }
+  dialog h2 { margin: 6px 0 6px; font-size: 1.4rem; font-weight: 800; letter-spacing: -.02em; }
+  dialog p { margin: 0 0 14px; color: var(--muted); font-size: .95rem; }
+  .row { display: flex; gap: 10px; justify-content: center; }
+  .row button { font: inherit; font-weight: 700; padding: 11px 18px; border-radius: 12px; cursor: pointer; border: 1px solid #e9e0db; background: #fff; }
+  .row button.primary { background: var(--wine); border-color: var(--wine); color: #fff; }
 
-  .confetti { position: fixed; top: -12px; width: 10px; height: 14px; z-index: 50; pointer-events: none; border-radius: 2px; animation: fall linear forwards; }
+  .confetti { position: fixed; top: -12px; width: 8px; height: 12px; z-index: 50; pointer-events: none; border-radius: 2px; animation: fall linear forwards; }
   @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
-</style>
-
-<style>
-  /* ===== Bordeaux glam theme ===== */
-  :root {
-    --wine: #5a0f22; --wine-dark: #3a0715; --wine-deep: #2a0510;
-    --gold: #d8b46a; --gold-soft: #f1dfb3; --cream: #fdf8f2;
-    --ink: #2b1118; --muted: #7c5c63; --line: #ecdcd3;
-  }
-  body {
-    font-family: Inter, system-ui, sans-serif; color: var(--ink);
-    background:
-      radial-gradient(1200px 600px at 50% -10%, #7a1630 0%, transparent 60%),
-      radial-gradient(800px 500px at 100% 30%, #4a0a1c 0%, transparent 60%),
-      linear-gradient(180deg, var(--wine-dark) 0%, var(--wine-deep) 100%);
-    background-attachment: fixed;
-  }
-  .sparkles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-  .sparkles i {
-    position: absolute; width: 4px; height: 4px; border-radius: 50%;
-    background: var(--gold-soft); box-shadow: 0 0 6px 2px rgba(241,223,179,.7);
-    animation: twinkle ease-in-out infinite; opacity: 0;
-  }
-  .sparkles i.star { width: 12px; height: 12px; background: none; box-shadow: none; }
-  .sparkles i.star::before, .sparkles i.star::after {
-    content: ""; position: absolute; left: 50%; top: 50%; background: var(--gold-soft);
-    transform: translate(-50%,-50%); border-radius: 2px; box-shadow: 0 0 8px rgba(241,223,179,.9);
-  }
-  .sparkles i.star::before { width: 2px; height: 12px; }
-  .sparkles i.star::after { width: 12px; height: 2px; }
-  @keyframes twinkle { 0%,100% { opacity: 0; transform: scale(.4); } 50% { opacity: 1; transform: scale(1); } }
-  @media (prefers-reduced-motion: reduce) { .sparkles { display: none; } }
-
-  .wrap { max-width: 1040px; padding: 56px 18px 72px; }
-  header { color: var(--cream); }
-  .kicker { font-size: .78rem; letter-spacing: .32em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
-  header h1 {
-    font-family: "Playfair Display", Georgia, serif; font-weight: 600; font-style: italic;
-    font-size: clamp(2.6rem, 9vw, 4.4rem); margin: 0 0 14px; letter-spacing: -.01em;
-    background: linear-gradient(100deg, #f6e7c1 0%, #d8b46a 35%, #fff4d6 50%, #c99a45 65%, #f6e7c1 100%);
-    background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
-    animation: shine 6s linear infinite;
-  }
-  @keyframes shine { to { background-position: 200% center; } }
-  .divider { width: 120px; height: 1px; margin: 0 auto 16px; background: linear-gradient(90deg, transparent, var(--gold), transparent); position: relative; }
-  .divider::after { content: "✦"; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-55%); color: var(--gold); font-size: 14px; background: transparent; padding: 0 8px; }
-  header p { color: rgba(253,248,242,.78); }
-  .note { background: rgba(255,255,255,.06); border: 1px solid rgba(216,180,106,.35); color: rgba(253,248,242,.85); backdrop-filter: blur(4px); }
-
-  .filters { margin: 28px 0 22px; gap: 8px; }
-  .filters button {
-    background: rgba(255,255,255,.06); color: var(--cream); border: 1px solid rgba(216,180,106,.35);
-    padding: 8px 16px; font-weight: 500;
-  }
-  .filters button:hover { border-color: var(--gold); }
-  .filters button.on { background: linear-gradient(135deg, #e9cd8a, #c99a45); color: var(--wine-deep); border-color: transparent; font-weight: 600; }
-  @media (max-width: 600px) {
-    .filters { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 6px; margin-left: -18px; margin-right: -18px; padding-left: 18px; padding-right: 18px; scrollbar-width: none; }
-    .filters::-webkit-scrollbar { display: none; }
-    .filters button { flex: 0 0 auto; }
-  }
-
-  ul { gap: 22px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-  li.item {
-    background: var(--cream); border: 1px solid rgba(216,180,106,.45); border-radius: 18px;
-    box-shadow: 0 18px 40px rgba(20,0,6,.35);
-  }
-  li.item:hover { transform: translateY(-4px); box-shadow: 0 24px 50px rgba(20,0,6,.45), 0 0 0 1px var(--gold); }
-  .pic { height: 190px; background: #fff; border-bottom: 1px solid var(--line); }
-  .pic .tag { background: var(--wine); color: var(--gold-soft); font-weight: 500; letter-spacing: .04em; }
-  .name { font-family: "Playfair Display", Georgia, serif; font-size: 1.18rem; color: var(--wine-dark); }
-  .price { color: var(--wine); }
-  .meta a { color: var(--wine); }
-  .noteline { color: var(--muted); font-size: .9rem; }
-  button.claim {
-    background: linear-gradient(135deg, #7a1630, var(--wine)); border: 1px solid rgba(216,180,106,.6);
-    color: var(--gold-soft); letter-spacing: .02em; padding: 12px 16px; border-radius: 12px;
-  }
-  button.claim:hover { background: linear-gradient(135deg, #8d1a38, #6a1228); box-shadow: 0 0 0 3px rgba(216,180,106,.25); }
-  .status { background: #f6ecd6; color: var(--wine); border: 1px solid rgba(216,180,106,.6); }
-  .stamp { color: var(--wine); border-color: var(--gold); }
-  dialog { background: var(--cream); border: 1px solid var(--gold); }
-  dialog h2 { font-family: "Playfair Display", Georgia, serif; color: var(--wine-dark); }
-  .row button.primary { background: var(--wine); border-color: var(--wine); color: var(--gold-soft); }
-  .empty { color: var(--cream); text-align: center; grid-column: 1/-1; padding: 30px 0; opacity: .8; }
-
-  @media (max-width: 600px) {
-    .wrap { padding-top: 40px; }
-    ul { grid-template-columns: 1fr; gap: 16px; }
-    .pic { height: 210px; }
-    header p { font-size: .98rem; }
-  }
-</style>
-
-<style>
-  /* ===== refined: calmer bordeaux ===== */
-  body { background: #3d0c19; background-attachment: scroll; }
-  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background: radial-gradient(900px 500px at 50% -20%, rgba(255,255,255,.06), transparent 70%); }
-  .sparkles i { width: 2px; height: 2px; box-shadow: 0 0 4px 1px rgba(241,223,179,.35); }
-  .sparkles i.star { display: none; }
-  @keyframes twinkle { 0%,100% { opacity: 0; } 50% { opacity: .55; } }
-  header h1 { font-style: normal; font-weight: 500; animation: none; background: none; color: #f6ead8; -webkit-background-clip: initial; background-clip: initial; letter-spacing: .01em; }
-  .kicker { color: rgba(246,234,216,.6); letter-spacing: .28em; font-size: .72rem; }
-  .divider { width: 48px; background: rgba(216,180,106,.6); }
-  .divider::after { content: none; }
-  .note { background: transparent; border: 1px solid rgba(246,234,216,.18); color: rgba(246,234,216,.75); backdrop-filter: none; }
-  .filters button { background: transparent; border-color: rgba(246,234,216,.22); color: rgba(246,234,216,.85); }
-  .filters button:hover { border-color: rgba(246,234,216,.5); }
-  .filters button.on { background: #f6ead8; color: #3d0c19; border-color: #f6ead8; }
-  li.item { border: 0; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.25); background: #fcf8f3; }
-  li.item:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(0,0,0,.3); }
-  .pic { border-bottom: 1px solid #eee4da; }
-  .pic .tag { background: rgba(255,255,255,.9); color: #5a0f22; border: 1px solid #eadbd0; font-weight: 500; }
-  .name { color: #2b1118; }
-  button.claim { background: #5a0f22; border: 0; color: #fcf8f3; }
-  button.claim:hover { background: #6e1430; box-shadow: none; }
-  .status { background: #f3e9e4; color: #5a0f22; border: 0; }
-  dialog { border: 0; }
 </style>
 </head>
 <body>
@@ -283,11 +149,10 @@
   <header>
     <div class="kicker">Katja's</div>
     <h1 id="title">Wishlist</h1>
-    <div class="divider"></div>
     <p id="intro">A few things I'd love. If you're getting me something, tap "I'll get this" so nobody else buys the same gift. Thank you!</p>
+    <div class="note" id="note">✨ Claimed gifts disappear from the list, so nobody (not even me) knows who's getting what.</div>
   </header>
 
-  <div class="note" id="note">When someone claims a gift it disappears from this list, so nobody (not even me) can see who's getting what. 🤫</div>
 
 
   <ul id="list"></ul>
@@ -310,24 +175,25 @@
       Give every item a unique id (letters/numbers, no spaces).
    ============================================================ */
 const ITEMS = [
-  { id: "jysk", logo: "https://jysk.nl/themes/custom/jysk_bootstrap/icons/static/jysk-logo.svg", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "Sent as a PDF, from €15. For cozy home upgrades (and probably too many candles).", tag: "Gift card", multi: true },
-  { id: "straps", img: "https://m.media-amazon.com/images/I/81wyTzt1trL._AC_SX679_.jpg", emoji: "🏋️‍♀️", name: "Lifting straps / wrist wraps for the gym", price: "€14.99", link: "https://www.amazon.nl/dp/B0CQT32FNM", note: "A similar pair is great too. Helps me pretend I lift heavier than I do.", tag: "Gym" },
-  { id: "studio-release", fit: "cover", img: "https://studiorelease.nl/wp-content/smush-webp/2026/02/studio-release-professionele-massage-480x600.jpg.webp", brand: "Studio Release", emoji: "💆‍♀️", gc: "#8f7a72", name: "Studio Release massage voucher (Utrecht)", price: "Massages from €69.50", link: "https://studiorelease.nl/massage/cadeaubon/", note: "Digital or physical voucher. Your gift: one extremely relaxed me.", tag: "Gift card", multi: true },
-  { id: "blender", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_148824113/fee_786_587_png", emoji: "🥤", name: "Blender (Philips Series 3000 HR2041/41)", price: "€36 (was €43.99)", link: "https://www.mediamarkt.nl/nl/product/_philips-hr204141-1877332.html", note: "For smoothies and soups. Healthy era starts now (mostly).", tag: "Kitchen" },
-  { id: "hairdryer", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_134471770/fee_786_587_png", emoji: "💇‍♀️", name: "Hair dryer with a diffuser (Remington One Dry & Style D6077)", price: "€41.99", link: "https://www.mediamarkt.nl/nl/product/_remington-one-dry-and-style-d6077-1799374.html", note: "With a diffuser, for the curls. They've been asking for it.", tag: "Beauty" },
-  { id: "heuvelrug-horses", fit: "cover", img: "https://heuvelrughorses.nl/wp-content/uploads/2026/02/PHOTO-2026-02-18-19-43-38-5.jpg", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Heuvelrug Horses gift card (horse riding, Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "A guided ride through the forest. Yes, there will be photos.", tag: "Gift card" },
-  { id: "desenio", img: "https://media.desenio.com/site_images/giftcard_white-large-nl.jpg?auto=compress,format&fit=max&w=800", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "Sent by email, from €10. My walls are looking a little naked.", tag: "Gift card", multi: true },
-  { id: "robe", img: "https://images.wehkamp.nl/i/wehkamp/17634017_eb_03/hunkemoller-fleece-gestreepte-badjas-bruin-8721522059148.jpg?w=800&qlt=75", emoji: "🛁", name: "A warm, cozy bathrobe", price: "€35 (was €49.99)", link: "https://www.wehkamp.nl/hunkemoller-fleece-gestreepte-badjas-bruin-17634017/", note: "Size M. This Hunkemöller fleece robe is just an example (although if you manage to get this one, great!). Any warm robe is lovely, ideally brown, dark green or burgundy. Goal: never leave the couch again.", tag: "Cozy" },
-  { id: "hema-pants", img: "https://static.hema.nl/dw/image/v2/BBRK_PRD/on/demandware.static/-/Sites-HEMA-master-catalog/default/dw06d60e28/product/23401972_01_001.webp?sw=800&sfrm=png", emoji: "🌙", name: "HEMA striped velours pyjama pants (dark blue)", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M. Peak cozy, zero regrets.", tag: "Cozy" },
+  { id: "jysk", logo: "https://jysk.nl/themes/custom/jysk_bootstrap/icons/static/jysk-logo.svg", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "Sent as a PDF, from €15.", tag: "Gift card", multi: true },
+  { id: "straps", img: "https://m.media-amazon.com/images/I/81wyTzt1trL._AC_SX679_.jpg", emoji: "🏋️‍♀️", name: "Lifting straps / wrist wraps for the gym", price: "€14.99", link: "https://www.amazon.nl/dp/B0CQT32FNM", note: "A similar pair is great too.", tag: "Gym" },
+  { id: "studio-release", fit: "cover", img: "https://studiorelease.nl/wp-content/smush-webp/2026/02/studio-release-professionele-massage-480x600.jpg.webp", brand: "Studio Release", emoji: "💆‍♀️", gc: "#8f7a72", name: "Studio Release massage voucher (Utrecht)", price: "Massages from €69.50", link: "https://studiorelease.nl/massage/cadeaubon/", note: "Digital or physical voucher.", tag: "Gift card", multi: true },
+  { id: "blender", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_148824113/fee_786_587_png", emoji: "🥤", name: "Blender (Philips Series 3000 HR2041/41)", price: "€36 (was €43.99)", link: "https://www.mediamarkt.nl/nl/product/_philips-hr204141-1877332.html", note: "For smoothies and soups.", tag: "Kitchen" },
+  { id: "hairdryer", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_134471770/fee_786_587_png", emoji: "💇‍♀️", name: "Hair dryer with a diffuser (Remington One Dry & Style D6077)", price: "€41.99", link: "https://www.mediamarkt.nl/nl/product/_remington-one-dry-and-style-d6077-1799374.html", note: "With a diffuser, for the curls.", tag: "Beauty" },
+  { id: "heuvelrug-horses", fit: "cover", img: "https://heuvelrughorses.nl/wp-content/uploads/2026/02/PHOTO-2026-02-18-19-43-38-5.jpg", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Heuvelrug Horses gift card (horse riding, Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "A guided ride through the forest.", tag: "Gift card" },
+  { id: "desenio", img: "https://media.desenio.com/site_images/giftcard_white-large-nl.jpg?auto=compress,format&fit=max&w=800", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "Sent by email, from €10.", tag: "Gift card", multi: true },
+  { id: "robe", img: "https://images.wehkamp.nl/i/wehkamp/17634017_eb_03/hunkemoller-fleece-gestreepte-badjas-bruin-8721522059148.jpg?w=800&qlt=75", emoji: "🛁", name: "A warm, cozy bathrobe", price: "€35 (was €49.99)", link: "https://www.wehkamp.nl/hunkemoller-fleece-gestreepte-badjas-bruin-17634017/", note: "Size M. This Hunkemöller fleece robe is just an example (although if you manage to get this one, great!). Any warm robe is lovely, ideally brown, dark green or burgundy.", tag: "Cozy" },
+  { id: "hema-pants", img: "https://static.hema.nl/dw/image/v2/BBRK_PRD/on/demandware.static/-/Sites-HEMA-master-catalog/default/dw06d60e28/product/23401972_01_001.webp?sw=800&sfrm=png", emoji: "🌙", name: "HEMA striped velours pyjama pants (dark blue)", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M.", tag: "Cozy" },
   { id: "tamper", img: "https://image.coolblue.nl/max/700xauto/products/1449288", emoji: "☕", name: "51 mm coffee tamper for my De'Longhi", price: "€23.99", link: "https://coolblue.nl/en/product/864839/de-longhi-tamper-dlsc058.html", note: "Must be 51 mm! Any brand, any shop. My espresso is counting on you.", tag: "Kitchen" },
   { id: "catan", img: "https://m.media-amazon.com/images/I/71AbDpYEkgL._AC_SX679_.jpg", emoji: "🎲", name: "Catan, English edition (board game)", price: "Price varies", link: "https://www.amazon.nl/-/en/dp/B0DYK1ZH2D", note: "English edition please. Fair warning: I will trade you sheep for wood. Amazon's price jumps around, so a board game shop may be cheaper.", tag: "Games" },
-  { id: "fav-game", img: "https://images.unsplash.com/photo-1761716475708-ef98183ccb62?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Loser does the dishes.", tag: "Games", multi: true },
-  { id: "laptop-stand", img: "https://m.media-amazon.com/images/I/71twLAB+YgL._AC_SX679_.jpg", emoji: "💻", name: "Laptop stand (Orionstar, aluminium)", price: "€29.99", link: "https://www.amazon.nl/dp/B08YDHLK7C", note: "Fits 10 to 15.6 inch laptops. My neck says thank you.", tag: "Home" },
-  { id: "london-book", img: "https://m.media-amazon.com/images/I/71bX9CKX-TL._SY522_.jpg", emoji: "📖", name: "Don't Be a Tourist in London (Messy Nessy guide)", price: "~€41", link: "https://www.amazon.nl/-/en/dp/1916430945", note: "For my next London trip. I'll bring you back a souvenir, promise.", tag: "Books" },
+  { id: "fav-game", fit: "cover", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Loser does the dishes.", tag: "Games", multi: true },
+  { id: "laptop-stand", img: "https://m.media-amazon.com/images/I/71twLAB+YgL._AC_SX679_.jpg", emoji: "💻", name: "Laptop stand (Orionstar, aluminium)", price: "€29.99", link: "https://www.amazon.nl/dp/B08YDHLK7C", note: "Fits 10 to 15.6 inch laptops.", tag: "Home" },
+  { id: "london-book", img: "https://m.media-amazon.com/images/I/71bX9CKX-TL._SY522_.jpg", emoji: "📖", name: "Don't Be a Tourist in London (Messy Nessy guide)", price: "~€41", link: "https://www.amazon.nl/-/en/dp/1916430945", note: "For my next London trip.", tag: "Books" },
+  { id: "murdle", img: "https://m.media-amazon.com/images/I/7198Z7YiOPL._SY522_.jpg", emoji: "🔎", name: "Murdle: Volume 1 (logic mystery puzzles)", price: "€13.96", link: "https://www.amazon.nl/dp/1250892317", note: "100 mysteries to solve with logic and deduction.", tag: "Books" },
   { id: "coffee-beans", img: "https://bocca.nl/cdn/shop/files/Bocca_Proefpakket_EverydayFavorites.png?width=800", emoji: "☕", name: "Specialty coffee beans", price: "Any amount", link: "https://bocca.nl/", note: "Any specialty roaster is great, for example Bocca or a local Utrecht roaster. Whole beans please, the De'Longhi is hungry.", tag: "Kitchen", multi: true },
-  { id: "zara", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Zara_Logo.svg", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "E-gift card by email, from €20. My future outfits thank you in advance.", tag: "Gift card", multi: true },
-  { id: "mango", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Logo_of_Mango_(new).svg", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Sent by email, any amount. My wardrobe asked for this personally.", tag: "Gift card", multi: true },
-  { id: "icaniwill", logo: "https://www.icaniwill.nl/apple-touch-icon.png", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "Sent by email, from €10. Gym outfits so I at least look like I know what I'm doing.", tag: "Gift card", multi: true },
+  { id: "zara", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Zara_Logo.svg", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "E-gift card by email, from €20.", tag: "Gift card", multi: true },
+  { id: "mango", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Logo_of_Mango_(new).svg", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Sent by email, any amount.", tag: "Gift card", multi: true },
+  { id: "icaniwill", logo: "https://www.icaniwill.nl/apple-touch-icon.png", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "Sent by email, from €10.", tag: "Gift card", multi: true },
   // Add more like this. multi: true means several people can claim it.
 ];
 
@@ -396,7 +262,7 @@ const TAG_COLORS = {
 };
 
 function confetti() {
-  const colors = ["#d8b46a","#f6ead8","#7a1630","#c9a0a8"];
+  const colors = ["#e2c38a","#f3dfb2","#82193b","#ffffff"];
   for (let i = 0; i < 36; i++) {
     const d = document.createElement("div");
     d.className = "confetti";
@@ -414,18 +280,23 @@ function confetti() {
 // sparkles
 (() => {
   const box = document.getElementById("sparkles");
-  const n = window.innerWidth < 600 ? 10 : 18;
+  const star = '<svg viewBox="0 0 24 24"><path fill="#f3dfb2" d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0z"/></svg>';
+  const n = window.innerWidth < 620 ? 18 : 34;
   for (let i = 0; i < n; i++) {
     const el = document.createElement("i");
-    if (i % 4 === 0) el.className = "star";
+    if (i % 3 === 0) { el.className = "dot"; }
+    else { const sz = 8 + Math.random() * 14; el.style.width = el.style.height = sz + "px"; el.innerHTML = star; }
     el.style.left = Math.random() * 100 + "%";
     el.style.top = Math.random() * 100 + "%";
-    el.style.animationDuration = 2.5 + Math.random() * 4 + "s";
-    el.style.animationDelay = -Math.random() * 6 + "s";
+    el.style.animationDuration = 3 + Math.random() * 4 + "s";
+    el.style.animationDelay = -Math.random() * 7 + "s";
     box.appendChild(el);
   }
 })();
 
+// reveal on scroll
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -40px 0px" }) : null;
+const reveal = () => [...listEl.children].forEach((li, i) => { if (li.classList.contains("in")) return; li.style.transitionDelay = Math.min(i % 6, 5) * 60 + "ms"; io ? io.observe(li) : li.classList.add("in"); });
 const matches = () => true;
 
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
@@ -451,8 +322,8 @@ function render() {
       right = `<button class="claim" data-claim="${esc(it.id)}">I'll get this</button>`;
     }
     const grad = TAG_COLORS[it.tag] || TAG_COLORS.default;
-    const pic = (it.logo || (it.img && it.multi))
-      ? `<div class="pic" style="--g:${grad}"><img class="photo${it.logo ? " logo" : ""}" src="${esc(it.logo || it.img)}" alt="${esc(it.brand || "")}" loading="lazy" style="${it.fit === "cover" ? "object-fit:cover;padding:0" : ""}" onerror="this.remove()"><span class="emoji">${it.emoji || "🎁"}</span><span class="tag">${esc(it.tag || "")}</span></div>`
+    const pic = (it.logo || it.img)
+      ? `<div class="pic" style="--g:${grad}"><img class="photo${it.logo ? " logo" : ""}" src="${esc(it.logo || it.img)}" alt="${esc(it.brand || "")}" loading="lazy" style="${it.fit === "cover" ? "object-fit:cover;padding:0;mix-blend-mode:normal" : ""}" onerror="this.remove()"><span class="emoji">${it.emoji || "🎁"}</span><span class="tag">${esc(it.tag || "")}</span>${taken ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`
       : it.multi && it.brand
       ? `<div class="pic gc" style="--g:${grad}"><div class="card" style="--gc:${it.gc || "#555"}"><div class="brand">${esc(it.brand)}</div><div class="row2"><span>GIFT CARD</span><span class="e">${it.emoji || "🎁"}</span></div></div></div>`
       : `<div class="pic" style="--g:${grad}">${it.img ? `<img class="photo" src="${esc(it.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="sparkle s1">✨</span><span class="emoji">${it.emoji || "🎁"}</span><span class="sparkle s2">✨</span><span class="tag">${esc(it.tag || "")}</span>${taken && !it.multi ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`;
@@ -460,6 +331,7 @@ function render() {
     listEl.appendChild(li);
   });
   if (!listEl.children.length) listEl.innerHTML = `<li class="empty">Nothing left here, everything is taken</li>`;
+  reveal();
 }
 
 const dlg = document.getElementById("dlg");
