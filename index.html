@@ -161,7 +161,7 @@
 <div class="wrap">
   <header>
     <h1 id="title">My Wishlist</h1>
-    <p id="intro">A few things I'd love. If you're getting me something, tap "I'll get this" so nobody else buys the same gift. Gift cards can be picked by more than one person. Thank you!</p>
+    <p id="intro">A few things I'd love. If you're getting me something, tap "I'll get this" so nobody else buys the same gift. Thank you!</p>
   </header>
 
   <div class="note" id="note">When someone claims a gift it disappears from this list, so nobody (not even me) can see who's getting what. 🤫</div>
@@ -189,21 +189,21 @@
       Give every item a unique id (letters/numbers, no spaces).
    ============================================================ */
 const ITEMS = [
-  { id: "zara", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "Several people can chip in. E-gift card sent by email, from €20", tag: "Gift card", multi: true },
-  { id: "mango", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Several people can chip in. Sent by email, from €25 or any amount", tag: "Gift card", multi: true },
-  { id: "jysk", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "Several people can chip in. Sent by email as a PDF, from €15", tag: "Gift card", multi: true },
+  { id: "zara", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "E-gift card sent by email, from €20", tag: "Gift card", multi: true },
+  { id: "mango", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Sent by email, from €25 or any amount", tag: "Gift card", multi: true },
+  { id: "jysk", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "Sent by email as a PDF, from €15", tag: "Gift card", multi: true },
   { id: "straps", img: "https://images.unsplash.com/photo-1745329532629-8e1768963d3a?w=800&q=70&auto=format&fit=crop", emoji: "🏋️‍♀️", name: "Lifting straps / wrist wraps for the gym", price: "", link: "https://www.amazon.nl/dp/B0CQT32FNM", note: "Doesn't have to be this exact pair, something similar is great", tag: "Gym" },
-  { id: "studio-release", brand: "Studio Release", emoji: "💆‍♀️", gc: "#8f7a72", name: "Studio Release massage voucher (Utrecht)", price: "Massages from €69.50", link: "https://studiorelease.nl/massage/cadeaubon/", note: "Several people can chip in. Digital or physical voucher", tag: "Gift card", multi: true },
+  { id: "studio-release", brand: "Studio Release", emoji: "💆‍♀️", gc: "#8f7a72", name: "Studio Release massage voucher (Utrecht)", price: "Massages from €69.50", link: "https://studiorelease.nl/massage/cadeaubon/", note: "Digital or physical voucher", tag: "Gift card", multi: true },
   { id: "blender", img: "https://images.unsplash.com/photo-1622818426197-d54f85b88690?w=800&q=70&auto=format&fit=crop", emoji: "🥤", name: "Blender for smoothies and soup (Bosch VitaPower MMB6172S)", price: "~€80-85", link: "https://www.mediamarkt.nl/nl/product/_bosch-mmb6172s-vitapower-1691413.html", note: "Heat-safe glass jug, so it can do hot soup", tag: "Kitchen" },
   { id: "hairdryer", img: "https://images.unsplash.com/photo-1727755868077-22f0d2ff8353?w=800&q=70&auto=format&fit=crop", emoji: "💇‍♀️", name: "Hair dryer with a diffuser", price: "~€49", link: "https://www.bol.com/nl/nl/p/philips-fohn-series-5000-bhd530-20-fohns-roze-perzikkleurig-parelmoer/9300000149842301/", note: "For example the Philips Series 5000 BHD530/20 (comes with a diffuser). Any good dryer with a diffuser is fine", tag: "Beauty" },
-  { id: "heuvelrug-horses", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Heuvelrug Horses gift card (horse riding, Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "Several people can chip in. For a guided ride through the forest", tag: "Gift card", multi: true },
-  { id: "desenio", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "Several people can chip in. Sent by email, from €10", tag: "Gift card", multi: true },
+  { id: "heuvelrug-horses", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Heuvelrug Horses gift card (horse riding, Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "For a guided ride through the forest", tag: "Gift card", multi: true },
+  { id: "desenio", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "Sent by email, from €10", tag: "Gift card", multi: true },
   { id: "robe", img: "https://images.unsplash.com/photo-1609535895148-cf9f5c446290?w=800&q=70&auto=format&fit=crop", emoji: "🛁", name: "A warm, cozy bathrobe", price: "~€46", link: "https://www.zarahome.com/nl/badjas-met-capuchon-360-gxm2-l43590014", note: "Size M, any colour, any brand, as long as it's warm (fleece, plush or thick cotton). The link is one example: a thick cotton robe with a hood", tag: "Cozy" },
   { id: "hema-pants", img: "https://images.unsplash.com/photo-1766056278967-c0646b1bfd67?w=800&q=70&auto=format&fit=crop", emoji: "🌙", name: "HEMA striped velours pyjama pants (dark blue)", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M", tag: "Cozy" },
   { id: "tamper", img: "https://images.unsplash.com/photo-1716623135997-690d6712b9a3?w=800&q=70&auto=format&fit=crop", emoji: "☕", name: "51 mm coffee tamper for my De'Longhi", price: "~€36", link: "https://coolblue.nl/en/product/864839/de-longhi-tamper-dlsc058.html", note: "Must be 51 mm! Any brand, any shop. The link is just an example", tag: "Kitchen" },
   { id: "catan", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Catan (board game)", price: "~€35", link: "https://www.bol.com/nl/nl/p/999games-catan-basisspel/1004004012362052/", note: "The basic game (Catan Basisspel)", tag: "Games" },
-  { id: "fav-game", img: "https://images.unsplash.com/photo-1761716475708-ef98183ccb62?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Several people can pick this", tag: "Games", multi: true },
-  { id: "icaniwill", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "Several people can chip in. Sent by email, from €10", tag: "Gift card", multi: true },
+  { id: "fav-game", img: "https://images.unsplash.com/photo-1761716475708-ef98183ccb62?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together!", tag: "Games", multi: true },
+  { id: "icaniwill", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "Sent by email, from €10", tag: "Gift card", multi: true },
   // Add more like this. multi: true means several people can claim it.
 ];
 
@@ -302,13 +302,13 @@ function render() {
     ].filter(Boolean).join(" · ");
     let right;
     if (myKey) {
-      right = `<span class="status">✓ ${it.multi ? "You're chipping in" : "You're getting this"}</span><button class="undo" data-undo="${esc(myKey)}">Changed my mind, undo</button>`;
+      right = `<span class="status">✓ You're getting this</span><button class="undo" data-undo="${esc(myKey)}">Changed my mind, undo</button>`;
     } else {
-      right = `<button class="claim" data-claim="${esc(it.id)}">${it.multi ? "I'll chip in" : "I'll get this"}</button>`;
+      right = `<button class="claim" data-claim="${esc(it.id)}">I'll get this</button>`;
     }
     const grad = TAG_COLORS[it.tag] || TAG_COLORS.default;
     const pic = it.multi && it.brand
-      ? `<div class="pic gc" style="--g:${grad}"><div class="card" style="--gc:${it.gc || "#555"}"><div class="brand">${esc(it.brand)}</div><div class="row2"><span>GIFT CARD</span><span class="e">${it.emoji || "🎁"}</span></div></div><span class="tag">Group gift</span></div>`
+      ? `<div class="pic gc" style="--g:${grad}"><div class="card" style="--gc:${it.gc || "#555"}"><div class="brand">${esc(it.brand)}</div><div class="row2"><span>GIFT CARD</span><span class="e">${it.emoji || "🎁"}</span></div></div></div>`
       : `<div class="pic" style="--g:${grad}">${it.img ? `<img class="photo" src="${esc(it.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="sparkle s1">✨</span><span class="emoji">${it.emoji || "🎁"}</span><span class="sparkle s2">✨</span><span class="tag">${esc(it.tag || "")}</span>${taken && !it.multi ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`;
     li.innerHTML = `${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}<div class="right">${right}</div></div>`;
     listEl.appendChild(li);
@@ -325,7 +325,7 @@ listEl.addEventListener("click", async e => {
     const itm = ITEMS.find(i => i.id === cId);
     document.getElementById("dlgItem").textContent = itm.name;
     document.getElementById("dlgHint").textContent = itm.multi
-      ? "Others can still chip in too. Nobody sees who's chipping in."
+      ? "It stays on the list, and nobody can see who's getting it."
       : "It will disappear from the list for everyone else. Only you will still see it here, so you can undo.";
     document.getElementById("dlgEmoji").textContent = itm.emoji || "🎁";
     dlg.showModal();
