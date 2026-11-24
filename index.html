@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Wishlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f3ee;
+    --card: #ffffff;
+    --ink: #24211e;
+    --muted: #807870;
+    --accent: #2f3e36;
+    --accent-dark: #1f2a24;
+    --done: #4f7a5a;
+    --done-soft: #e8efe8;
+    --line: #e6e0d7;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, sans-serif;
+    color: var(--ink);
+    line-height: 1.5;
+    min-height: 100vh;
+    background: var(--bg);
+    overflow-x: hidden;
+  }
+  /* floating background emoji */
+  .floaters { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .floaters span {
+    position: absolute; bottom: -60px; font-size: 28px; opacity: .35;
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-115vh) rotate(260deg); }
+  }
+  @media (prefers-reduced-motion: reduce) { .floaters { display: none; } }
+
+  .wrap { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 48px 20px 80px; }
+  header { text-align: center; }
+  .bigbow { display: none; }
+  @keyframes wiggle { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg) scale(1.06); } }
+  header h1 {
+    font-family: Fraunces, Georgia, serif; font-weight: 600;
+    font-size: clamp(2.4rem, 7vw, 3.6rem);
+    margin: 4px 0 10px; line-height: 1.05; letter-spacing: -0.02em;
+  }
+  header p { margin: 0 auto; color: var(--muted); max-width: 56ch; font-size: 1.05rem; }
+  .note {
+    margin: 24px auto 8px; max-width: 560px; text-align: center;
+    padding: 10px 16px; background: #fff; border: 1px solid var(--line);
+    border-radius: 12px; font-size: 0.9rem; color: var(--muted);
+  }
+  .note.demo { background: #fbf6e8; }
+  .filters { display: flex; gap: 8px; margin: 24px 0 20px; flex-wrap: wrap; justify-content: center; }
+  .filters button {
+    border: 1px solid var(--line); background: #fff; color: var(--ink);
+    padding: 7px 16px; border-radius: 999px; font: inherit; font-weight: 500; font-size: 0.92rem; cursor: pointer;
+    transition: transform .15s;
+  }
+  .filters button:hover { transform: translateY(-2px); }
+  .filters button.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
+  li.item {
+    background: var(--card); border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    transition: transform .2s, box-shadow .2s;
+    animation: pop .4s ease-out both;
+  }
+  li.item:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,.06); }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px); } }
+
+  .pic {
+    position: relative; height: 170px; overflow: hidden; display: grid; place-items: center;
+    background: var(--g, #ece6dc);
+  }
+  .pic .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; transition: transform .4s; }
+  li.item:hover .pic .photo { transform: scale(1.04); }
+  .pic .tag, .pic .stamp { z-index: 2; }
+  .pic .emoji { font-size: 60px; transition: transform .3s; }
+  li.item:hover .pic .emoji { transform: scale(1.08); }
+  .pic .sparkle { display: none; }
+  .pic .sparkle.s1 { top: 14px; left: 18px; } .pic .sparkle.s2 { bottom: 16px; right: 20px; }
+  .pic .tag {
+    position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,.8);
+    padding: 2px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 500; color: var(--ink);
+  }
+  /* gift-card look */
+  .pic.gc { align-content: center; }
+  .pic.gc .card {
+    width: 78%; height: 100px; border-radius: 14px; padding: 12px 14px; color: #fff;
+    background: linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,0)), var(--gc, #555);
+    box-shadow: 0 8px 18px rgba(0,0,0,.14); transform: rotate(-3deg);
+    display: flex; flex-direction: column; justify-content: space-between; transition: transform .3s;
+  }
+  li.item:hover .pic.gc .card { transform: rotate(0deg); }
+  .pic.gc .brand { font-family: Fraunces, Georgia, serif; font-size: 1.3rem; font-weight: 600; line-height: 1.1; }
+  .pic.gc .row2 { display: flex; justify-content: space-between; align-items: end; font-size: .68rem; font-weight: 600; letter-spacing: .1em; opacity: .9; }
+  .pic.gc .row2 .e { font-size: 22px; letter-spacing: 0; opacity: .9; }
+
+  .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .name { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 1.1rem; line-height: 1.25; }
+  .meta { color: var(--muted); font-size: 0.9rem; }
+  .price { font-weight: 600; color: var(--ink); }
+  .meta a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration: none; }
+  .meta a:hover { text-decoration: underline; }
+  .noteline { font-size: 0.88rem; color: var(--muted); }
+  .right { margin-top: auto; padding-top: 6px; }
+  button.claim {
+    width: 100%; border: 0; background: var(--accent); color: #fff; font: inherit; font-weight: 600; font-size: .95rem;
+    padding: 11px 16px; border-radius: 10px; cursor: pointer;
+    transition: transform .1s, box-shadow .1s;
+  }
+  button.claim:hover { transform: translateY(-1px); }
+  button.claim:active { transform: translateY(1px); }
+  button.claim:hover { background: var(--accent-dark); }
+  .status {
+    display: block; background: var(--done-soft); color: var(--done); text-align: center;
+    font-weight: 600; font-size: 0.9rem; padding: 9px 12px; border-radius: 10px;
+  }
+  .undo { display: block; margin: 8px auto 0; font-size: 0.82rem; color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline; padding: 0; font-family: inherit; }
+
+  li.item.claimed .pic { filter: grayscale(.7); opacity: .75; }
+  li.item.claimed .name { text-decoration: line-through; text-decoration-thickness: 2px; color: var(--muted); }
+  .stamp {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-12deg);
+    background: #fff; color: var(--done); border: 2px solid var(--done); border-radius: 8px;
+    padding: 3px 12px; font-family: Inter, sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: .04em;
+  }
+
+  footer { margin-top: 44px; color: var(--muted); font-size: 0.85rem; text-align: center; }
+
+  dialog {
+    border: 0; border-radius: 16px; padding: 26px; max-width: 380px; width: 90%; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2); font-family: Inter, sans-serif; color: var(--ink);
+  }
+  dialog::backdrop { background: rgba(36,33,30,.4); }
+  dialog .dlgEmoji { font-size: 44px; }
+  dialog h2 { font-family: Fraunces, Georgia, serif; margin: 4px 0 6px; font-size: 1.5rem; }
+  dialog p { margin: 0 0 16px; color: var(--muted); font-size: 0.95rem; }
+  dialog input {
+    width: 100%; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px; font: inherit; margin-bottom: 16px;
+  }
+  dialog input:focus { outline: none; border-color: var(--ink); }
+  .row { display: flex; gap: 8px; justify-content: center; }
+  .row button { font: inherit; font-weight: 500; padding: 10px 18px; border-radius: 10px; cursor: pointer; border: 1px solid var(--line); background: #fff; }
+  .row button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .confetti { position: fixed; top: -12px; width: 10px; height: 14px; z-index: 50; pointer-events: none; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 id="title">My Wishlist</h1>
+    <p id="intro">A few things I'd love. If you're getting me something, tap "I'll get this" so nobody else buys the same gift. Gift cards can be picked by more than one person. Thank you!</p>
+  </header>
+
+  <div class="note" id="note">When someone claims a gift it disappears from this list, so nobody (not even me) can see who's getting what. 🤫</div>
+
+
+  <ul id="list"></ul>
+
+  <footer>Made with love. Changes show up for everyone instantly.<br><small>Photos are examples from <a href="https://unsplash.com" target="_blank" rel="noopener" style="color:inherit">Unsplash</a>, not the exact products.</small></footer>
+</div>
+
+<dialog id="dlg">
+  <div class="dlgEmoji" id="dlgEmoji">🎁</div>
+  <h2>Is this your gift?</h2>
+  <p id="dlgItem"></p>
+  <p style="font-size:.85rem" id="dlgHint"></p>
+  <div class="row">
+    <button id="dlgCancel">Cancel</button>
+    <button id="dlgOk" class="primary">Yes, mark it</button>
+  </div>
+</dialog>
+
+<script type="module">
+/* ============================================================
+   1) YOUR WISHLIST ITEMS: edit this list.
+      Give every item a unique id (letters/numbers, no spaces).
+   ============================================================ */
+const ITEMS = [
+  { id: "zara", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "Several people can chip in. E-gift card sent by email, from €20", tag: "Gift card", multi: true },
+  { id: "mango", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Several people can chip in. Sent by email, from €25 or any amount", tag: "Gift card", multi: true },
+  { id: "jysk", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "Several people can chip in. Sent by email as a PDF, from €15", tag: "Gift card", multi: true },
+  { id: "straps", img: "https://images.unsplash.com/photo-1745329532629-8e1768963d3a?w=800&q=70&auto=format&fit=crop", emoji: "🏋️‍♀️", name: "Lifting straps / wrist wraps for the gym", price: "", link: "https://www.amazon.nl/dp/B0CQT32FNM", note: "Doesn't have to be this exact pair, something similar is great", tag: "Gym" },
+  { id: "studio-release", brand: "Studio Release", emoji: "💆‍♀️", gc: "#8f7a72", name: "Studio Release massage voucher (Utrecht)", price: "Massages from €69.50", link: "https://studiorelease.nl/massage/cadeaubon/", note: "Several people can chip in. Digital or physical voucher", tag: "Gift card", multi: true },
+  { id: "blender", img: "https://images.unsplash.com/photo-1622818426197-d54f85b88690?w=800&q=70&auto=format&fit=crop", emoji: "🥤", name: "Blender for smoothies and soup (Bosch VitaPower MMB6172S)", price: "~€80-85", link: "https://www.mediamarkt.nl/nl/product/_bosch-mmb6172s-vitapower-1691413.html", note: "Heat-safe glass jug, so it can do hot soup", tag: "Kitchen" },
+  { id: "hairdryer", img: "https://images.unsplash.com/photo-1727755868077-22f0d2ff8353?w=800&q=70&auto=format&fit=crop", emoji: "💇‍♀️", name: "Hair dryer with a diffuser", price: "~€49", link: "https://www.bol.com/nl/nl/p/philips-fohn-series-5000-bhd530-20-fohns-roze-perzikkleurig-parelmoer/9300000149842301/", note: "For example the Philips Series 5000 BHD530/20 (comes with a diffuser). Any good dryer with a diffuser is fine", tag: "Beauty" },
+  { id: "heuvelrug-horses", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Heuvelrug Horses gift card (horse riding, Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "Several people can chip in. For a guided ride through the forest", tag: "Gift card", multi: true },
+  { id: "desenio", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "Several people can chip in. Sent by email, from €10", tag: "Gift card", multi: true },
+  { id: "robe", img: "https://images.unsplash.com/photo-1609535895148-cf9f5c446290?w=800&q=70&auto=format&fit=crop", emoji: "🛁", name: "A warm, cozy bathrobe", price: "~€46", link: "https://www.zarahome.com/nl/badjas-met-capuchon-360-gxm2-l43590014", note: "Size M, any colour, any brand, as long as it's warm (fleece, plush or thick cotton). The link is one example: a thick cotton robe with a hood", tag: "Cozy" },
+  { id: "hema-pants", img: "https://images.unsplash.com/photo-1766056278967-c0646b1bfd67?w=800&q=70&auto=format&fit=crop", emoji: "🌙", name: "HEMA striped velours pyjama pants (dark blue)", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M", tag: "Cozy" },
+  { id: "tamper", img: "https://images.unsplash.com/photo-1716623135997-690d6712b9a3?w=800&q=70&auto=format&fit=crop", emoji: "☕", name: "51 mm coffee tamper for my De'Longhi", price: "~€36", link: "https://coolblue.nl/en/product/864839/de-longhi-tamper-dlsc058.html", note: "Must be 51 mm! Any brand, any shop. The link is just an example", tag: "Kitchen" },
+  { id: "catan", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Catan (board game)", price: "~€35", link: "https://www.bol.com/nl/nl/p/999games-catan-basisspel/1004004012362052/", note: "The basic game (Catan Basisspel)", tag: "Games" },
+  { id: "fav-game", img: "https://images.unsplash.com/photo-1761716475708-ef98183ccb62?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Several people can pick this", tag: "Games", multi: true },
+  { id: "icaniwill", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "Several people can chip in. Sent by email, from €10", tag: "Gift card", multi: true },
+  // Add more like this. multi: true means several people can claim it.
+];
+
+/* ============================================================
+   2) FIREBASE CONFIG: paste yours here (see setup steps).
+      While this is empty the page runs in demo mode and
+      claims are only saved in your own browser.
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyDdQrmG-a_5cA2-HIW8bpBUG1SErhCTRMI",
+  authDomain: "wishlist-e9655.firebaseapp.com",
+  projectId: "wishlist-e9655",
+  storageBucket: "wishlist-e9655.firebasestorage.app",
+  messagingSenderId: "677194251418",
+  appId: "1:677194251418:web:d6eeba3c44db4e78ee3323"
+};
+
+/* ------------------------------------------------------------ */
+const listEl = document.getElementById("list");
+const noteEl = document.getElementById("note");
+let claims = {};
+let filter = "all";
+const mine = JSON.parse(localStorage.getItem("wishlist-mine") || "{}");
+const saveMine = () => { try { localStorage.setItem("wishlist-mine", JSON.stringify(mine)); } catch {} };
+
+let store;
+if (firebaseConfig.projectId) {
+  const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+  const fs = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+  const db = fs.getFirestore(initializeApp(firebaseConfig));
+  const col = fs.collection(db, "claims");
+  fs.onSnapshot(col, snap => {
+    claims = {};
+    snap.forEach(d => { const v = d.data(); (claims[v.item] ||= []).push({ ...v, key: d.id }); });
+    render();
+  }, err => { noteEl.textContent = "Couldn't load claims: " + err.message; noteEl.className = "note demo"; });
+  store = {
+    claim: async (item, by) => (await fs.addDoc(col, { item, by, at: Date.now() })).id,
+    unclaim: key => fs.deleteDoc(fs.doc(db, "claims", key)),
+  };
+} else {
+  noteEl.textContent = "Demo mode: claims are only saved in this browser until the Firebase config is added.";
+  noteEl.className = "note demo";
+  let rows = JSON.parse(localStorage.getItem("wishlist-demo2") || "[]");
+  const persist = () => {
+    localStorage.setItem("wishlist-demo2", JSON.stringify(rows));
+    claims = {}; rows.forEach(r => (claims[r.item] ||= []).push(r)); render();
+  };
+  store = {
+    claim: async (item, by) => { const key = Math.random().toString(36).slice(2); rows.push({ item, by, at: Date.now(), key }); persist(); return key; },
+    unclaim: async key => { rows = rows.filter(r => r.key !== key); persist(); },
+  };
+  rows.forEach(r => (claims[r.item] ||= []).push(r));
+}
+
+const TAG_COLORS = {
+  "Gift card": "#ece6dc",
+  "Gym": "#e4e7e0",
+  "Kitchen": "#efe8da",
+  "Beauty": "#ede4e1",
+  "Cozy": "#e3e6ea",
+  "Games": "#e6e2ec",
+  default: "#ece6dc",
+};
+
+function confetti() {
+  const colors = ["#c9a96e","#2f3e36","#a8b8a0","#d9c7b0","#7a8f9a"];
+  for (let i = 0; i < 50; i++) {
+    const d = document.createElement("div");
+    d.className = "confetti";
+    d.style.left = Math.random() * 100 + "vw";
+    d.style.background = colors[i % colors.length];
+    d.style.animationDuration = 1.6 + Math.random() * 1.8 + "s";
+    d.style.animationDelay = Math.random() * .4 + "s";
+    d.style.transform = `rotate(${Math.random() * 360}deg)`;
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 4200);
+  }
+}
+
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+
+function render() {
+  listEl.innerHTML = "";
+  ITEMS.forEach(it => {
+    const c = claims[it.id] || [];
+    const myKey = c.map(x => x.key).find(k => mine[k]);
+    // a single gift claimed by someone else is hidden for everyone else
+    if (!it.multi && c.length && !myKey) return;
+    const li = document.createElement("li");
+    li.className = "item" + (!it.multi && myKey ? " claimed" : "");
+    const taken = !it.multi && !!myKey;
+    const metaBits = [
+      it.price && `<span class="price">${esc(it.price)}</span>`,
+      it.link && `<a href="${esc(it.link)}" target="_blank" rel="noopener">Buy here ↗</a>`,
+    ].filter(Boolean).join(" · ");
+    let right;
+    if (myKey) {
+      right = `<span class="status">✓ ${it.multi ? "You're chipping in" : "You're getting this"}</span><button class="undo" data-undo="${esc(myKey)}">Changed my mind, undo</button>`;
+    } else {
+      right = `<button class="claim" data-claim="${esc(it.id)}">${it.multi ? "I'll chip in" : "I'll get this"}</button>`;
+    }
+    const grad = TAG_COLORS[it.tag] || TAG_COLORS.default;
+    const pic = it.multi && it.brand
+      ? `<div class="pic gc" style="--g:${grad}"><div class="card" style="--gc:${it.gc || "#555"}"><div class="brand">${esc(it.brand)}</div><div class="row2"><span>GIFT CARD</span><span class="e">${it.emoji || "🎁"}</span></div></div><span class="tag">Group gift</span></div>`
+      : `<div class="pic" style="--g:${grad}">${it.img ? `<img class="photo" src="${esc(it.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="sparkle s1">✨</span><span class="emoji">${it.emoji || "🎁"}</span><span class="sparkle s2">✨</span><span class="tag">${esc(it.tag || "")}</span>${taken && !it.multi ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`;
+    li.innerHTML = `${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}<div class="right">${right}</div></div>`;
+    listEl.appendChild(li);
+  });
+  if (!listEl.children.length) listEl.innerHTML = `<li class="item"><div class="body"><div class="name">Nothing here</div></div></li>`;
+}
+
+const dlg = document.getElementById("dlg");
+let pending = null;
+listEl.addEventListener("click", async e => {
+  const cId = e.target.dataset.claim, uId = e.target.dataset.undo;
+  if (cId) {
+    pending = cId;
+    const itm = ITEMS.find(i => i.id === cId);
+    document.getElementById("dlgItem").textContent = itm.name;
+    document.getElementById("dlgHint").textContent = itm.multi
+      ? "Others can still chip in too. Nobody sees who's chipping in."
+      : "It will disappear from the list for everyone else. Only you will still see it here, so you can undo.";
+    document.getElementById("dlgEmoji").textContent = itm.emoji || "🎁";
+    dlg.showModal();
+  }
+  if (uId) { await store.unclaim(uId); delete mine[uId]; saveMine(); render(); }
+});
+document.getElementById("dlgCancel").onclick = () => dlg.close();
+document.getElementById("dlgOk").onclick = async () => {
+  const name = "";
+  const id = pending; dlg.close();
+  const item = ITEMS.find(i => i.id === id);
+  if (!item.multi && claims[id]?.length) { render(); return; }
+  const key = await store.claim(id, name);
+  mine[key] = true; saveMine(); render();
+  confetti();
+};
+
+
+render();
+</script>
+</body>
+</html>
