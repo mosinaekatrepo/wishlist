@@ -84,6 +84,7 @@
   .pic .photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; padding: 10px; z-index: 1; transition: transform .4s; }
   li.item:hover .pic .photo { transform: scale(1.04); }
   .pic .tag, .pic .stamp { z-index: 2; }
+  .pic .photo.logo { padding: 36px 48px; }
   .pic .emoji { font-size: 60px; transition: transform .3s; }
   li.item:hover .pic .emoji { transform: scale(1.08); }
   .pic .sparkle { display: none; }
@@ -189,21 +190,21 @@
       Give every item a unique id (letters/numbers, no spaces).
    ============================================================ */
 const ITEMS = [
-  { id: "zara", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "E-gift card sent by email, from €20", tag: "Gift card", multi: true },
-  { id: "mango", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Sent by email, from €25 or any amount", tag: "Gift card", multi: true },
-  { id: "jysk", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "Sent by email as a PDF, from €15", tag: "Gift card", multi: true },
+  { id: "zara", img: "https://static.zara.net/assets/public/213f/fd28/85134746ba90/0876762271b7/50001000100-r/50001000100-r.jpg?ts=1795088343177&w=560", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "E-gift card sent by email, from €20", tag: "Gift card", multi: true },
+  { id: "mango", logo: "https://shop.mango.com/_next/static/immutable/media/favicon.1l5wy4dx3los0.svg", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Sent by email, from €25 or any amount", tag: "Gift card", multi: true },
+  { id: "jysk", logo: "https://jysk.nl/themes/custom/jysk_bootstrap/icons/static/jysk-logo.svg", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "Sent by email as a PDF, from €15", tag: "Gift card", multi: true },
   { id: "straps", img: "https://m.media-amazon.com/images/I/81wyTzt1trL._AC_SX679_.jpg", emoji: "🏋️‍♀️", name: "Lifting straps / wrist wraps for the gym", price: "€14.99", link: "https://www.amazon.nl/dp/B0CQT32FNM", note: "Doesn't have to be this exact pair, something similar is great", tag: "Gym" },
-  { id: "studio-release", brand: "Studio Release", emoji: "💆‍♀️", gc: "#8f7a72", name: "Studio Release massage voucher (Utrecht)", price: "Massages from €69.50", link: "https://studiorelease.nl/massage/cadeaubon/", note: "Digital or physical voucher", tag: "Gift card", multi: true },
+  { id: "studio-release", fit: "cover", img: "https://studiorelease.nl/wp-content/uploads/2024/09/cadeaubon-massage-hilversum-amersfoort.jpg", brand: "Studio Release", emoji: "💆‍♀️", gc: "#8f7a72", name: "Studio Release massage voucher (Utrecht)", price: "Massages from €69.50", link: "https://studiorelease.nl/massage/cadeaubon/", note: "Digital or physical voucher", tag: "Gift card", multi: true },
   { id: "blender", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MP_179198784/fee_786_587_png", emoji: "🥤", name: "Blender for smoothies and soup (Bosch VitaPower MMB6172S)", price: "€106", link: "https://www.mediamarkt.nl/nl/product/_bosch-vitapower-serie-4-mmb6172s-blender-zilver-99586352.html", note: "Heat-safe glass jug, so it can do hot soup", tag: "Kitchen" },
   { id: "hairdryer", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_134471770/fee_786_587_png", emoji: "💇‍♀️", name: "Hair dryer with a diffuser (Remington One Dry & Style D6077)", price: "€41.99", link: "https://www.mediamarkt.nl/nl/product/_remington-one-dry-and-style-d6077-1799374.html", note: "Black Friday deal at MediaMarkt", tag: "Beauty" },
-  { id: "heuvelrug-horses", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Heuvelrug Horses gift card (horse riding, Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "For a guided ride through the forest", tag: "Gift card", multi: true },
-  { id: "desenio", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "Sent by email, from €10", tag: "Gift card", multi: true },
+  { id: "heuvelrug-horses", fit: "cover", img: "https://heuvelrughorses.nl/wp-content/uploads/2026/02/PHOTO-2026-02-18-19-43-38-5.jpg", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Heuvelrug Horses gift card (horse riding, Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "For a guided ride through the forest", tag: "Gift card", multi: true },
+  { id: "desenio", img: "https://media.desenio.com/site_images/giftcard_white-large-nl.jpg?auto=compress,format&fit=max&w=800", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "Sent by email, from €10", tag: "Gift card", multi: true },
   { id: "robe", img: "https://images.wehkamp.nl/i/wehkamp/17634017_eb_03/hunkemoller-fleece-gestreepte-badjas-bruin-8721522059148.jpg?w=800&qlt=75", emoji: "🛁", name: "A warm, cozy bathrobe", price: "€35 (was €49.99)", link: "https://www.wehkamp.nl/hunkemoller-fleece-gestreepte-badjas-bruin-17634017/", note: "Size M. This Hunkemöller fleece robe is just an example. Any warm robe is great, ideally in brown, dark green or burgundy", tag: "Cozy" },
   { id: "hema-pants", img: "https://static.hema.nl/dw/image/v2/BBRK_PRD/on/demandware.static/-/Sites-HEMA-master-catalog/default/dw06d60e28/product/23401972_01_001.webp?sw=800&sfrm=png", emoji: "🌙", name: "HEMA striped velours pyjama pants (dark blue)", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M", tag: "Cozy" },
   { id: "tamper", img: "https://image.coolblue.nl/max/700xauto/products/1449288", emoji: "☕", name: "51 mm coffee tamper for my De'Longhi", price: "€23.99", link: "https://coolblue.nl/en/product/864839/de-longhi-tamper-dlsc058.html", note: "Must be 51 mm! Any brand, any shop. The link is just an example", tag: "Kitchen" },
   { id: "catan", img: "https://media.s-bol.com/3n2QVp1KOz2n/mZmwlAR/550x582.jpg", emoji: "🎲", name: "Catan (board game)", price: "€24.99", link: "https://www.bol.com/nl/nl/p/999games-catan-basisspel/1004004012362052/", note: "The basic game (Catan Basisspel)", tag: "Games" },
   { id: "fav-game", img: "https://images.unsplash.com/photo-1761716475708-ef98183ccb62?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together!", tag: "Games", multi: true },
-  { id: "icaniwill", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "Sent by email, from €10", tag: "Gift card", multi: true },
+  { id: "icaniwill", logo: "https://www.icaniwill.nl/apple-touch-icon.png", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "Sent by email, from €10", tag: "Gift card", multi: true },
   // Add more like this. multi: true means several people can claim it.
 ];
 
@@ -307,7 +308,9 @@ function render() {
       right = `<button class="claim" data-claim="${esc(it.id)}">I'll get this</button>`;
     }
     const grad = TAG_COLORS[it.tag] || TAG_COLORS.default;
-    const pic = it.multi && it.brand
+    const pic = (it.logo || (it.img && it.multi))
+      ? `<div class="pic" style="--g:${grad}"><img class="photo${it.logo ? " logo" : ""}" src="${esc(it.logo || it.img)}" alt="${esc(it.brand || "")}" loading="lazy" style="${it.fit === "cover" ? "object-fit:cover;padding:0" : ""}" onerror="this.remove()"><span class="emoji">${it.emoji || "🎁"}</span><span class="tag">${esc(it.tag || "")}</span></div>`
+      : it.multi && it.brand
       ? `<div class="pic gc" style="--g:${grad}"><div class="card" style="--gc:${it.gc || "#555"}"><div class="brand">${esc(it.brand)}</div><div class="row2"><span>GIFT CARD</span><span class="e">${it.emoji || "🎁"}</span></div></div></div>`
       : `<div class="pic" style="--g:${grad}">${it.img ? `<img class="photo" src="${esc(it.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="sparkle s1">✨</span><span class="emoji">${it.emoji || "🎁"}</span><span class="sparkle s2">✨</span><span class="tag">${esc(it.tag || "")}</span>${taken && !it.multi ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`;
     li.innerHTML = `${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}<div class="right">${right}</div></div>`;
