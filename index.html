@@ -6,7 +6,7 @@
 <title>My Wishlist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #2b0a13; --bg2: #4a0f20; --wine: #6b1430; --wine-2: #82193b;
@@ -18,7 +18,7 @@
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0; min-height: 100vh; color: var(--ink);
-    font-family: Manrope, system-ui, -apple-system, sans-serif; line-height: 1.5;
+    font-family: Jost, system-ui, -apple-system, sans-serif; font-weight: 400; line-height: 1.5;
     background:
       radial-gradient(1000px 520px at 15% -10%, rgba(176,40,80,.35), transparent 60%),
       radial-gradient(900px 600px at 110% 20%, rgba(120,20,50,.45), transparent 60%),
@@ -129,7 +129,7 @@
 
   dialog {
     border: 0; border-radius: 24px; padding: 28px; width: min(92vw, 400px); text-align: center; color: var(--ink);
-    font-family: Manrope, sans-serif; box-shadow: 0 30px 80px rgba(0,0,0,.45);
+    font-family: Jost, sans-serif; box-shadow: 0 30px 80px rgba(0,0,0,.45);
   }
   dialog::backdrop { background: rgba(20,4,9,.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
   dialog .dlgEmoji { font-size: 42px; }
@@ -141,6 +141,21 @@
 
   .confetti { position: fixed; top: -12px; width: 8px; height: 12px; z-index: 50; pointer-events: none; border-radius: 2px; animation: fall linear forwards; }
   @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+  /* sophisticated type */
+  header h1 { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 500; letter-spacing: -.01em; line-height: .9; font-size: clamp(3.6rem, 13vw, 7rem); }
+  .kicker { font-weight: 500; letter-spacing: .4em; font-size: .7rem; }
+  header p { font-weight: 300; font-size: 1.05rem; letter-spacing: .01em; }
+  .note { font-weight: 300; letter-spacing: .02em; }
+  .name { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.45rem; line-height: 1.15; letter-spacing: 0; }
+  .meta .price { font-weight: 500; letter-spacing: .02em; }
+  .meta a { font-weight: 500; letter-spacing: .04em; text-transform: uppercase; font-size: .7rem; padding: 5px 11px; }
+  .noteline { font-weight: 300; font-size: .92rem; }
+  .pic .tag { font-weight: 500; letter-spacing: .14em; font-size: .62rem; }
+  button.claim { font-weight: 500; text-transform: uppercase; letter-spacing: .16em; font-size: .78rem; padding: 14px 16px; }
+  .status { font-weight: 500; letter-spacing: .04em; }
+  dialog h2 { font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.8rem; letter-spacing: 0; }
+  .row button { font-weight: 500; letter-spacing: .06em; }
 </style>
 </head>
 <body>
@@ -191,6 +206,7 @@ const ITEMS = [
   { id: "london-book", img: "https://m.media-amazon.com/images/I/71bX9CKX-TL._SY522_.jpg", emoji: "📖", name: "Don't Be a Tourist in London (Messy Nessy guide)", price: "~€41", link: "https://www.amazon.nl/-/en/dp/1916430945", note: "For my next London trip.", tag: "Books" },
   { id: "murdle", img: "https://m.media-amazon.com/images/I/7198Z7YiOPL._SY522_.jpg", emoji: "🔎", name: "Murdle: Volume 1 (logic mystery puzzles)", price: "€13.96", link: "https://www.amazon.nl/dp/1250892317", note: "100 mysteries to solve with logic and deduction.", tag: "Books" },
   { id: "strout-book", img: "https://m.media-amazon.com/images/I/81paxISMYbL._SY522_.jpg", emoji: "📖", name: "The Things We Never Say by Elizabeth Strout", price: "€16.77", link: "https://www.amazon.nl/dp/0241814308", note: "Hardcover.", tag: "Books" },
+  { id: "puppy-book", img: "https://m.media-amazon.com/images/I/61FsPJ+NM5L._SY522_.jpg", emoji: "🐶", name: "Easy Peasy Puppy Squeezy by Steve Mann", price: "€10.61", link: "https://www.amazon.nl/dp/1788701607", note: "Paperback. A step-by-step guide to raising a happy puppy.", tag: "Books" },
   { id: "coffee-beans", img: "https://bocca.nl/cdn/shop/files/Bocca_Proefpakket_EverydayFavorites.png?width=800", emoji: "☕", name: "Specialty coffee beans", price: "Any amount", link: "https://bocca.nl/", note: "Any specialty roaster is great, for example Bocca or a local Utrecht roaster. Whole beans please, the De'Longhi is hungry.", tag: "Kitchen", multi: true },
   { id: "zara", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Zara_Logo.svg", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "E-gift card by email, from €20.", tag: "Gift card", multi: true },
   { id: "mango", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Logo_of_Mango_(new).svg", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Sent by email, any amount.", tag: "Gift card", multi: true },
