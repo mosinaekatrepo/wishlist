@@ -197,6 +197,9 @@
     .pic { height: 240px; }
     ul#list { gap: 22px; }
   }
+  .spoiler { font-size: .8rem; color: #6f6064; }
+  .spoiler summary { cursor: pointer; letter-spacing: .08em; text-transform: uppercase; font-size: .66rem; color: #6b1430; }
+  .spoiler div { margin-top: 6px; }
 </style>
 </head>
 <body>
@@ -219,6 +222,8 @@
   <h2>Is this your gift?</h2>
   <p id="dlgItem"></p>
   <p style="font-size:.85rem" id="dlgHint"></p>
+  <input id="dlgWhat" maxlength="50" style="display:none;width:100%;padding:12px 14px;border:1px solid #e9e0db;font:inherit;margin:0 0 6px;">
+  <p id="dlgErr" style="display:none;color:#a32d2d;font-size:.8rem;margin:0 0 10px;">Please type which game first</p>
   <div class="row">
     <button id="dlgCancel">Cancel</button>
     <button id="dlgOk" class="primary">Yes, mark it</button>
@@ -242,7 +247,7 @@ const ITEMS = [
   { id: "hema-pants", img: "https://static.hema.nl/dw/image/v2/BBRK_PRD/on/demandware.static/-/Sites-HEMA-master-catalog/default/dw06d60e28/product/23401972_01_001.webp?sw=800&sfrm=png", emoji: "🌙", name: "HEMA striped velours pyjama pants (dark blue)", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M. It's way too cold in my apartment and I'm saving on energy, so dressing warmer it is.", tag: "Cozy" },
   { id: "tamper", img: "https://image.coolblue.nl/max/700xauto/products/1449288", emoji: "☕", name: "51 mm coffee tamper for my De'Longhi", price: "€23.99", link: "https://coolblue.nl/en/product/864839/de-longhi-tamper-dlsc058.html", note: "It needs to be 51 mm to fit my machine, but any brand is fine. My morning coffee will thank you.", tag: "Kitchen" },
   { id: "catan", img: "https://m.media-amazon.com/images/I/71AbDpYEkgL._AC_SX679_.jpg", emoji: "🎲", name: "Catan, English edition (board game)", price: "Price varies", link: "https://www.amazon.nl/-/en/dp/B0DYK1ZH2D", note: "English edition please. Fair warning: I will trade you sheep for wood.", tag: "Games" },
-  { id: "fav-game", fit: "cover", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together!", tag: "Games", multi: true },
+  { id: "fav-game", askWhat: "Which game are you getting?", fit: "cover", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Several people can pick this, just tell us which game you're getting.", tag: "Games", multi: true },
   { id: "laptop-stand", img: "https://m.media-amazon.com/images/I/71twLAB+YgL._AC_SX679_.jpg", emoji: "💻", name: "Laptop stand (Orionstar, aluminium)", price: "€29.99", link: "https://www.amazon.nl/dp/B08YDHLK7C", note: "Fits 10 to 15.6 inch laptops. My neck says thank you.", tag: "Home" },
   { id: "london-book", img: "https://m.media-amazon.com/images/I/71bX9CKX-TL._SY522_.jpg", emoji: "📖", name: "Don't Be a Tourist in London (Messy Nessy guide)", price: "~€41", link: "https://www.amazon.nl/-/en/dp/1916430945", note: "For my next London trip. I'll bring you back a souvenir, promise.", tag: "Books" },
   { id: "murdle", img: "https://m.media-amazon.com/images/I/7198Z7YiOPL._SY522_.jpg", emoji: "🔎", name: "Murdle: Volume 1 (logic mystery puzzles)", price: "€13.96", link: "https://www.amazon.nl/dp/1250892317", note: "100 logic mysteries to solve. Don't worry, only fictional murder.", tag: "Books" },
@@ -372,6 +377,8 @@ function render() {
       it.link && `<a href="${esc(it.link)}" target="_blank" rel="noopener">Buy here ↗</a>`,
     ].filter(Boolean).join(" · ");
     let right;
+    const takenGames = it.askWhat ? c.map(x => x.by).filter(Boolean) : [];
+    const spoiler = takenGames.length ? `<details class="spoiler"><summary>Spoiler: games already taken (${takenGames.length})</summary><div>${takenGames.map(esc).join(", ")}</div></details>` : "";
     if (myKey) {
       right = `<span class="status">✓ You're getting this</span><button class="undo" data-undo="${esc(myKey)}">Changed my mind, undo</button>`;
     } else {
@@ -383,7 +390,7 @@ function render() {
       : it.multi && it.brand
       ? `<div class="pic gc" style="--g:${grad}"><div class="card" style="--gc:${it.gc || "#555"}"><div class="brand">${esc(it.brand)}</div><div class="row2"><span>GIFT CARD</span><span class="e">${it.emoji || "🎁"}</span></div></div></div>`
       : `<div class="pic" style="--g:${grad}">${it.img ? `<img class="photo" src="${esc(it.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="sparkle s1">✨</span><span class="emoji">${it.emoji || "🎁"}</span><span class="sparkle s2">✨</span><span class="tag">${esc(it.tag || "")}</span>${taken && !it.multi ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`;
-    li.innerHTML = `<span class="num">No. ${String(ITEMS.indexOf(it) + 1).padStart(2, "0")}</span>${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}${it.quip ? `<div class="quip">${esc(it.quip)}</div>` : ""}<div class="right">${right}</div></div>`;
+    li.innerHTML = `<span class="num">No. ${String(ITEMS.indexOf(it) + 1).padStart(2, "0")}</span>${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}${spoiler}${it.quip ? `<div class="quip">${esc(it.quip)}</div>` : ""}<div class="right">${right}</div></div>`;
     listEl.appendChild(li);
   });
   if (!listEl.children.length) listEl.innerHTML = `<li class="empty">Nothing left here, everything is taken</li>`;
@@ -398,6 +405,9 @@ listEl.addEventListener("click", async e => {
     pending = cId;
     const itm = ITEMS.find(i => i.id === cId);
     document.getElementById("dlgItem").textContent = itm.name;
+    const w = document.getElementById("dlgWhat");
+    w.style.display = itm.askWhat ? "block" : "none"; w.value = ""; w.placeholder = itm.askWhat || "";
+    document.getElementById("dlgErr").style.display = "none";
     document.getElementById("dlgHint").textContent = itm.multi
       ? "It stays on the list, and nobody can see who's getting it."
       : "It will disappear from the list for everyone else. Only you will still see it here, so you can undo.";
@@ -408,7 +418,12 @@ listEl.addEventListener("click", async e => {
 });
 document.getElementById("dlgCancel").onclick = () => dlg.close();
 document.getElementById("dlgOk").onclick = async () => {
-  const name = "";
+  const itmAsk = ITEMS.find(i => i.id === pending);
+  let name = "";
+  if (itmAsk && itmAsk.askWhat) {
+    name = document.getElementById("dlgWhat").value.trim();
+    if (!name) { document.getElementById("dlgErr").style.display = "block"; return; }
+  }
   const id = pending; dlg.close();
   const item = ITEMS.find(i => i.id === id);
   if (!item.multi && claims[id]?.length) { render(); return; }
