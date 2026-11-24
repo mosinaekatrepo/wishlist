@@ -290,8 +290,6 @@
   <div class="note" id="note">When someone claims a gift it disappears from this list, so nobody (not even me) can see who's getting what. 🤫</div>
 
 
-  <div class="filters" id="filters"></div>
-
   <ul id="list"></ul>
 </div>
 
@@ -428,20 +426,7 @@ function confetti() {
   }
 })();
 
-// category filters
-const FILTERS = [["all","All"],["Gift card","Gift cards"],["Kitchen","Kitchen"],["Cozy","Cozy"],["Gym","Gym"],["Beauty","Beauty"],["Games","Games"],["Home","Home"],["Books","Books"],["under25","Under €25"]];
-let cat = "all";
-const priceNum = it => { const m = (it.price || "").match(/€\s?(\d+(?:[.,]\d+)?)/); return m ? parseFloat(m[1].replace(",", ".")) : null; };
-const matches = it => cat === "all" || (cat === "under25" ? (priceNum(it) !== null && priceNum(it) < 25) : it.tag === cat);
-(() => {
-  const box = document.getElementById("filters");
-  FILTERS.filter(([k]) => k === "all" || k === "under25" || ITEMS.some(i => i.tag === k)).forEach(([k, label]) => {
-    const b = document.createElement("button");
-    b.textContent = label; if (k === cat) b.className = "on";
-    b.onclick = () => { cat = k; [...box.children].forEach(x => x.classList.toggle("on", x === b)); render(); };
-    box.appendChild(b);
-  });
-})();
+const matches = () => true;
 
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
 
