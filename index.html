@@ -190,6 +190,7 @@ const ITEMS = [
   { id: "laptop-stand", img: "https://m.media-amazon.com/images/I/71twLAB+YgL._AC_SX679_.jpg", emoji: "💻", name: "Laptop stand (Orionstar, aluminium)", price: "€29.99", link: "https://www.amazon.nl/dp/B08YDHLK7C", note: "Fits 10 to 15.6 inch laptops.", tag: "Home" },
   { id: "london-book", img: "https://m.media-amazon.com/images/I/71bX9CKX-TL._SY522_.jpg", emoji: "📖", name: "Don't Be a Tourist in London (Messy Nessy guide)", price: "~€41", link: "https://www.amazon.nl/-/en/dp/1916430945", note: "For my next London trip.", tag: "Books" },
   { id: "murdle", img: "https://m.media-amazon.com/images/I/7198Z7YiOPL._SY522_.jpg", emoji: "🔎", name: "Murdle: Volume 1 (logic mystery puzzles)", price: "€13.96", link: "https://www.amazon.nl/dp/1250892317", note: "100 mysteries to solve with logic and deduction.", tag: "Books" },
+  { id: "strout-book", img: "https://m.media-amazon.com/images/I/81paxISMYbL._SY522_.jpg", emoji: "📖", name: "The Things We Never Say by Elizabeth Strout", price: "€16.77", link: "https://www.amazon.nl/dp/0241814308", note: "Hardcover.", tag: "Books" },
   { id: "coffee-beans", img: "https://bocca.nl/cdn/shop/files/Bocca_Proefpakket_EverydayFavorites.png?width=800", emoji: "☕", name: "Specialty coffee beans", price: "Any amount", link: "https://bocca.nl/", note: "Any specialty roaster is great, for example Bocca or a local Utrecht roaster. Whole beans please, the De'Longhi is hungry.", tag: "Kitchen", multi: true },
   { id: "zara", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Zara_Logo.svg", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "E-gift card by email, from €20.", tag: "Gift card", multi: true },
   { id: "mango", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Logo_of_Mango_(new).svg", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Sent by email, any amount.", tag: "Gift card", multi: true },
@@ -296,6 +297,7 @@ function confetti() {
 
 // reveal on scroll
 const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -40px 0px" }) : null;
+setTimeout(() => [...listEl.children].forEach(li => li.classList.add("in")), 1200);
 const reveal = () => [...listEl.children].forEach((li, i) => { if (li.classList.contains("in")) return; li.style.transitionDelay = Math.min(i % 6, 5) * 60 + "ms"; io ? io.observe(li) : li.classList.add("in"); });
 const matches = () => true;
 
