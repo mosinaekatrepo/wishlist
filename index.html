@@ -211,6 +211,22 @@
   }
   .pic .tag { color: #3d0c19; top: 14px; right: 14px; }
   .num { top: 14px; left: 14px; z-index: 3; font-size: .85rem; color: #6b1430; }
+  /* text gift card tile */
+  .pic.gc { background: #f3ede6; }
+  .pic.gc .card { width: 72%; height: 130px; border-radius: 6px; padding: 18px 20px; color: #f7ecdf;
+    background: linear-gradient(135deg, #6b1430, #3d0c19); box-shadow: 0 14px 30px -12px rgba(61,12,25,.55); transform: rotate(-2deg); }
+  .pic.gc .brand { font-family: "Bodoni Moda", Didot, serif; font-weight: 500; font-size: 1.5rem; letter-spacing: .02em; }
+  .pic.gc .row2 { font-family: Montserrat, sans-serif; font-size: .6rem; letter-spacing: .3em; color: #e6cc9c; }
+  .pic.gc .row2 .e { display: none; }
+  /* natural sparkles */
+  .sparkles i { animation-name: glint; animation-timing-function: ease-in-out; }
+  .sparkles i svg { filter: drop-shadow(0 0 3px rgba(243,223,178,.6)); }
+  .sparkles i.dot { width: 2px !important; height: 2px !important; background: #fff5e0; box-shadow: 0 0 6px 1px rgba(243,223,178,.45); }
+  @keyframes glint {
+    0%, 70%, 100% { opacity: 0; transform: scale(.2) rotate(0deg); }
+    80% { opacity: .9; transform: scale(1) rotate(20deg); }
+    88% { opacity: .35; transform: scale(.7) rotate(35deg); }
+  }
 </style>
 </head>
 <body>
@@ -250,7 +266,7 @@ const ITEMS = [
   { id: "heuvelrug-horses", fit: "cover", img: "https://heuvelrughorses.nl/wp-content/uploads/2026/02/PHOTO-2026-02-18-19-43-38-5.jpg", brand: "Heuvelrug Horses", emoji: "🐴", gc: "#5b6e52", name: "Horse ride at Heuvelrug Horses (Leersum)", price: "Any amount", link: "https://heuvelrughorses.nl/buitenritten#boeken", note: "I'd love to go on more rides outside, through the forest and the heath.", tag: "Experience" },
   { id: "hairdryer", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_134471770/fee_786_587_png", emoji: "💇‍♀️", name: "Hair dryer with a diffuser (Remington One Dry & Style D6077)", price: "€41.99", link: "https://www.mediamarkt.nl/nl/product/_remington-one-dry-and-style-d6077-1799374.html", note: "Apparently I have curls. Time to actually do something with them.", tag: "Beauty" },
   { id: "catan", img: "https://media.s-bol.com/nypPp703RpJ4/AngYkEB/550x592.jpg", emoji: "🎲", name: "Catan, English edition (board game)", price: "€38.49", link: "https://www.bol.com/nl/nl/p/catan-basegame-6th-edition-en/9300000236944361/", note: "English edition please. Fair warning: I will trade you sheep for wood.", tag: "Games" },
-  { id: "jysk", logo: "https://jysk.nl/themes/custom/jysk_bootstrap/icons/static/jysk-logo.svg", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "To help me finally finish decorating my apartment.", tag: "Gift card", multi: true },
+  { id: "jysk", brand: "JYSK", emoji: "🛋️", gc: "#3d5570", name: "JYSK gift card", price: "Any amount", link: "https://jysk.nl/giftcard", note: "To help me finally finish decorating my apartment.", tag: "Gift card", multi: true },
   { id: "robe", img: "https://images.wehkamp.nl/i/wehkamp/17634017_eb_03/hunkemoller-fleece-gestreepte-badjas-bruin-8721522059148.jpg?w=800&qlt=75", emoji: "🛁", name: "A warm, cozy bathrobe", price: "€35", link: "https://www.wehkamp.nl/hunkemoller-fleece-gestreepte-badjas-bruin-17634017/", note: "Size M. This Hunkemöller fleece robe is just an example (although if you manage to get this one, great!). Any warm robe is lovely, ideally brown, dark green or burgundy.", tag: "Cozy" },
   { id: "london-book", img: "https://m.media-amazon.com/images/I/71bX9CKX-TL._SY522_.jpg", emoji: "📖", name: "Don't Be a Tourist in London (Messy Nessy guide)", price: "~€41", link: "https://www.amazon.nl/-/en/dp/1916430945", note: "For my next London trip. I'll bring you back a souvenir, promise.", tag: "Books" },
   { id: "tamper", img: "https://image.coolblue.nl/max/700xauto/products/1449288", emoji: "☕", name: "51 mm coffee tamper for my De'Longhi", price: "€23.99", link: "https://coolblue.nl/en/product/864839/de-longhi-tamper-dlsc058.html", note: "It needs to be 51 mm to fit my machine, but any brand is fine. Better coffee, better mornings.", tag: "Kitchen" },
@@ -258,16 +274,16 @@ const ITEMS = [
   { id: "straps", img: "https://m.media-amazon.com/images/I/81wyTzt1trL._AC_SX679_.jpg", emoji: "🏋️‍♀️", name: "Lifting straps / wrist wraps for the gym", price: "€14.99", link: "https://www.amazon.nl/dp/B0CQT32FNM", note: "This pair or something similar, doesn't have to be pink! I overstretch my wrists all the time, so these would save me.", tag: "Gym" },
   { id: "murdle", img: "https://m.media-amazon.com/images/I/7198Z7YiOPL._SY522_.jpg", emoji: "🔎", name: "Murdle: Volume 1 (logic mystery puzzles)", price: "€13.96", link: "https://www.amazon.nl/dp/1250892317", note: "100 logic mysteries to solve. Don't worry, only fictional murder.", tag: "Books" },
   { id: "blender", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_148824113/fee_786_587_png", emoji: "🥤", name: "Blender (Philips Series 3000 HR2041/41)", price: "€36", link: "https://www.mediamarkt.nl/nl/product/_philips-hr204141-1877332.html", note: "A surprising one from me, I know, but I'd love to make more creamy soups.", tag: "Kitchen" },
-  { id: "desenio", img: "https://media.desenio.com/site_images/giftcard_white-large-nl.jpg?auto=compress,format&fit=max&w=800", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "My walls are looking a little naked.", tag: "Gift card", multi: true },
+  { id: "desenio", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "My walls are looking a little naked.", tag: "Gift card", multi: true },
   { id: "hema-pants", img: "https://static.hema.nl/dw/image/v2/BBRK_PRD/on/demandware.static/-/Sites-HEMA-master-catalog/default/dw06d60e28/product/23401972_01_001.webp?sw=800&sfrm=png", emoji: "🌙", name: "HEMA striped velours pyjama pants", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M, in dark blue, dark red or green. It's way too cold in my apartment and I'm saving on energy, so dressing warmer it is.", tag: "Cozy" },
   { id: "fav-game", askWhat: "Which game are you getting?", fit: "cover", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Several people can pick this, just tell us which game you're getting.", tag: "Games", multi: true },
   { id: "laptop-stand", img: "https://m.media-amazon.com/images/I/71twLAB+YgL._AC_SX679_.jpg", emoji: "💻", name: "Laptop stand (Orionstar, aluminium)", price: "€29.99", link: "https://www.amazon.nl/dp/B08YDHLK7C", note: "Fits 10 to 15.6 inch laptops. My neck has some opinions about my posture.", tag: "Home" },
   { id: "strout-book", img: "https://m.media-amazon.com/images/I/81paxISMYbL._SY522_.jpg", emoji: "📖", name: "The Things We Never Say by Elizabeth Strout", price: "€16.77", link: "https://www.amazon.nl/dp/0241814308", tag: "Books" },
   { id: "coffee-beans", fit: "cover", img: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=70&auto=format&fit=crop", emoji: "☕", name: "Specialty coffee beans", price: "Any amount", link: "", note: "Any specialty roaster you like. Whole beans please!", tag: "Kitchen", multi: true },
   { id: "puppy-book", img: "https://m.media-amazon.com/images/I/61FsPJ+NM5L._SY522_.jpg", emoji: "🐶", name: "Easy Peasy Puppy Squeezy by Steve Mann", price: "€10.61", link: "https://www.amazon.nl/dp/1788701607", note: "Not many people know this yet, but I'm thinking about getting a puppy next year. Time to start preparing!", tag: "Books" },
-  { id: "zara", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Zara_Logo.svg", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "Because there are never enough clothes (sorry, sustainability).", tag: "Gift card", multi: true },
-  { id: "mango", logo: "https://commons.wikimedia.org/wiki/Special:FilePath/Logo_of_Mango_(new).svg", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "My wardrobe asked for this personally.", tag: "Gift card", multi: true },
-  { id: "icaniwill", logo: "https://www.icaniwill.nl/apple-touch-icon.png", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "To motivate me to go to the gym more.", tag: "Gift card", multi: true },
+  { id: "zara", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "Because there are never enough clothes (sorry, sustainability).", tag: "Gift card", multi: true },
+  { id: "mango", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "My wardrobe asked for this personally.", tag: "Gift card", multi: true },
+  { id: "icaniwill", brand: "ICANIWILL", emoji: "🏋️‍♀️", gc: "#1e1e1e", name: "ICANIWILL gift card (gym clothes)", price: "Any amount", link: "https://www.icaniwill.nl/nl/cadeaukaart", note: "To motivate me to go to the gym more.", tag: "Gift card", multi: true },
   // Add more like this. multi: true means several people can claim it.
 ];
 
@@ -354,16 +370,16 @@ function confetti() {
 // sparkles
 (() => {
   const box = document.getElementById("sparkles");
-  const star = '<svg viewBox="0 0 24 24"><path fill="#f3dfb2" d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0z"/></svg>';
-  const n = window.innerWidth < 620 ? 12 : 22;
+  const star = '<svg viewBox="0 0 24 24"><path fill="#f6e6c2" d="M12 0c.5 6.4 5.6 11.5 12 12-6.4.5-11.5 5.6-12 12-.5-6.4-5.6-11.5-12-12C6.4 11.5 11.5 6.4 12 0z"/></svg>';
+  const n = window.innerWidth < 620 ? 16 : 28;
   for (let i = 0; i < n; i++) {
     const el = document.createElement("i");
-    if (i % 3 === 0) { el.className = "dot"; }
-    else { const sz = 8 + Math.random() * 14; el.style.width = el.style.height = sz + "px"; el.innerHTML = star; }
+    if (Math.random() < .7) { el.className = "dot"; }
+    else { const sz = 6 + Math.random() * 7; el.style.width = el.style.height = sz + "px"; el.innerHTML = star; }
     el.style.left = Math.random() * 100 + "%";
     el.style.top = Math.random() * 100 + "%";
-    el.style.animationDuration = 3 + Math.random() * 4 + "s";
-    el.style.animationDelay = -Math.random() * 7 + "s";
+    el.style.animationDuration = 4 + Math.random() * 6 + "s";
+    el.style.animationDelay = -Math.random() * 10 + "s";
     box.appendChild(el);
   }
 })();
