@@ -227,6 +227,7 @@
     80% { opacity: .9; transform: scale(1) rotate(20deg); }
     88% { opacity: .35; transform: scale(.7) rotate(35deg); }
   }
+  .free { text-align: center; font-size: .66rem; letter-spacing: .22em; text-transform: uppercase; color: #6b1430; border-top: 1px solid rgba(107,20,48,.18); padding-top: 14px; }
 </style>
 </head>
 <body>
@@ -276,10 +277,10 @@ const ITEMS = [
   { id: "blender", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_148824113/fee_786_587_png", emoji: "🥤", name: "Blender (Philips Series 3000 HR2041/41)", price: "€36", link: "https://www.mediamarkt.nl/nl/product/_philips-hr204141-1877332.html", note: "A surprising one from me, I know, but I'd love to make more creamy soups.", tag: "Kitchen" },
   { id: "desenio", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "My walls are looking a little naked.", tag: "Gift card", multi: true },
   { id: "hema-pants", img: "https://static.hema.nl/dw/image/v2/BBRK_PRD/on/demandware.static/-/Sites-HEMA-master-catalog/default/dw06d60e28/product/23401972_01_001.webp?sw=800&sfrm=png", emoji: "🌙", name: "HEMA striped velours pyjama pants", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M, in dark blue, dark red or green. It's way too cold in my apartment and I'm saving on energy, so dressing warmer it is.", tag: "Cozy" },
-  { id: "fav-game", askWhat: "Which game are you getting?", fit: "cover", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Several people can pick this, just tell us which game you're getting.", tag: "Games", multi: true },
+  { id: "fav-game", noClaim: true, fit: "cover", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together!", tag: "Games", multi: true },
   { id: "laptop-stand", img: "https://m.media-amazon.com/images/I/71twLAB+YgL._AC_SX679_.jpg", emoji: "💻", name: "Laptop stand (Orionstar, aluminium)", price: "€29.99", link: "https://www.amazon.nl/dp/B08YDHLK7C", note: "Fits 10 to 15.6 inch laptops. My neck has some opinions about my posture.", tag: "Home" },
   { id: "strout-book", img: "https://m.media-amazon.com/images/I/81paxISMYbL._SY522_.jpg", emoji: "📖", name: "The Things We Never Say by Elizabeth Strout", price: "€16.77", link: "https://www.amazon.nl/dp/0241814308", tag: "Books" },
-  { id: "coffee-beans", fit: "cover", img: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=70&auto=format&fit=crop", emoji: "☕", name: "Specialty coffee beans", price: "Any amount", link: "", note: "Any specialty roaster you like. Whole beans please!", tag: "Kitchen", multi: true },
+  { id: "coffee-beans", noClaim: true, fit: "cover", img: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=70&auto=format&fit=crop", emoji: "☕", name: "Specialty coffee beans", price: "Any amount", link: "", note: "Any specialty roaster you like. Whole beans please!", tag: "Kitchen", multi: true },
   { id: "puppy-book", img: "https://m.media-amazon.com/images/I/61FsPJ+NM5L._SY522_.jpg", emoji: "🐶", name: "Easy Peasy Puppy Squeezy by Steve Mann", price: "€10.61", link: "https://www.amazon.nl/dp/1788701607", note: "Not many people know this yet, but I'm thinking about getting a puppy next year. Time to start preparing!", tag: "Books" },
   { id: "zara", brand: "ZARA", emoji: "👗", gc: "#2b2b2b", name: "Zara gift card", price: "Any amount", link: "https://www.zara.com/nl/nl/-/e-gift-card-c815541p1016002.html", note: "Because there are never enough clothes (sorry, sustainability).", tag: "Gift card", multi: true },
   { id: "mango", brand: "MANGO", emoji: "👚", gc: "#a8875f", name: "Mango gift card", price: "Any amount", link: "https://shop.mango.com/nl/nl/gift-voucher", note: "Because there are never enough clothes (sorry, sustainability).", tag: "Gift card", multi: true },
@@ -406,7 +407,9 @@ function render() {
     let right;
     const takenGames = it.askWhat ? c.map(x => x.by).filter(Boolean) : [];
     const spoiler = takenGames.length ? `<details class="spoiler"><summary>Spoiler: games already taken (${takenGames.length})</summary><div>${takenGames.map(esc).join(", ")}</div></details>` : "";
-    if (myKey) {
+    if (it.noClaim) {
+      right = `<div class="free">No need to claim, just surprise me</div>`;
+    } else if (myKey) {
       right = `<span class="status">✓ You're getting this</span><button class="undo" data-undo="${esc(myKey)}">Changed my mind, undo</button>`;
     } else {
       right = `<button class="claim" data-claim="${esc(it.id)}">I'll get this</button>`;
