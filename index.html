@@ -157,6 +157,46 @@
   .status { font-weight: 500; letter-spacing: .04em; }
   dialog h2 { font-family: "Bodoni Moda", Didot, Georgia, serif; font-weight: 600; font-size: 1.8rem; letter-spacing: 0; }
   .row button { font-weight: 500; letter-spacing: .06em; }
+
+  /* ===== editorial luxury ===== */
+  body { background: radial-gradient(1200px 700px at 50% -10%, #5a1226 0%, #34091a 45%, #1f050d 100%); background-attachment: fixed; }
+  .wrap { max-width: 1180px; padding: 96px 28px 120px; }
+  header { margin-bottom: 64px; }
+  .kicker { font-family: Montserrat, sans-serif; font-weight: 400; letter-spacing: .5em; font-size: .66rem; color: #d9bd8b; }
+  .kicker::before, .kicker::after { width: 40px; opacity: .45; }
+  header h1 { margin: 18px 0 22px; background: none; color: #f7ecdf; -webkit-background-clip: initial; background-clip: initial; font-weight: 400; }
+  header p { font-weight: 300; font-size: .98rem; letter-spacing: .02em; line-height: 1.8; color: rgba(247,236,223,.7); max-width: 46ch; }
+  .note { margin-top: 30px; border-radius: 0; background: transparent; border: 0; border-top: 1px solid rgba(217,189,139,.28); border-bottom: 1px solid rgba(217,189,139,.28); padding: 14px 8px; max-width: 560px; font-size: .72rem; text-transform: uppercase; letter-spacing: .22em; font-weight: 400; color: rgba(247,236,223,.72); backdrop-filter: none; }
+  ul#list { gap: 34px 28px; margin-top: 0; }
+  li.item { border-radius: 4px; background: #fbf7f2; box-shadow: 0 30px 60px -30px rgba(0,0,0,.7); }
+  li.item::after { border-radius: 4px; }
+  li.item.in:hover { transform: translateY(-4px); }
+  .pic { margin: 0; border-radius: 0; height: 260px; background: #f3ede6; border-bottom: 1px solid rgba(31,18,22,.06); }
+  .pic .photo { padding: 26px; }
+  .pic .photo.logo { padding: 70px 56px; }
+  .pic .tag { top: 16px; left: auto; right: 16px; border-radius: 0; background: transparent; border: 0; backdrop-filter: none; color: rgba(31,18,22,.55); font-size: .6rem; letter-spacing: .24em; padding: 0; }
+  .num { position: absolute; top: 14px; left: 18px; z-index: 2; font-family: "Bodoni Moda", Didot, serif; font-style: italic; font-size: .95rem; color: #6b1430; }
+  .body { padding: 24px 26px 26px; gap: 10px; }
+  .name { font-size: 1.35rem; font-weight: 400; line-height: 1.25; }
+  .meta { gap: 14px; }
+  .meta .price { font-family: Montserrat, sans-serif; font-weight: 500; font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: #6b1430; }
+  .meta a { background: none; padding: 0 0 2px; border-radius: 0; border-bottom: 1px solid rgba(31,18,22,.35); font-size: .66rem; letter-spacing: .2em; color: #1f1216; }
+  .meta a:hover { background: none; border-color: #6b1430; color: #6b1430; }
+  .noteline { font-size: .88rem; line-height: 1.7; color: #6f6064; }
+  .right { padding-top: 16px; }
+  button.claim { background: transparent; color: #6b1430; border: 1px solid #6b1430; border-radius: 0; box-shadow: none; font-size: .7rem; letter-spacing: .26em; padding: 15px 16px; transition: background .25s, color .25s; }
+  button.claim:hover { background: #6b1430; color: #fbf7f2; filter: none; box-shadow: none; }
+  .status { border-radius: 0; background: #f3e6e9; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
+  .stamp { border-radius: 0; font-family: Montserrat, sans-serif; font-size: .7rem; letter-spacing: .24em; }
+  dialog { border-radius: 4px; }
+  .row button { border-radius: 0; text-transform: uppercase; font-size: .72rem; letter-spacing: .18em; }
+  .row button.primary { background: #6b1430; }
+  @media (max-width: 620px) {
+    .wrap { padding: 64px 18px 80px; }
+    header { margin-bottom: 44px; }
+    .pic { height: 240px; }
+    ul#list { gap: 22px; }
+  }
 </style>
 </head>
 <body>
@@ -166,7 +206,7 @@
     <div class="kicker">Katja's</div>
     <h1 id="title">Wishlist</h1>
     <p id="intro">A few things I'd love. If you're getting me something, tap "I'll get this" so nobody else buys the same gift. Thank you!</p>
-    <div class="note" id="note">✨ Claimed gifts disappear from the list, so nobody (not even me) knows who's getting what.</div>
+    <div class="note" id="note">Claimed gifts quietly disappear, so nobody (not even me) knows who's getting what</div>
   </header>
 
 
@@ -299,7 +339,7 @@ function confetti() {
 (() => {
   const box = document.getElementById("sparkles");
   const star = '<svg viewBox="0 0 24 24"><path fill="#f3dfb2" d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0z"/></svg>';
-  const n = window.innerWidth < 620 ? 18 : 34;
+  const n = window.innerWidth < 620 ? 12 : 22;
   for (let i = 0; i < n; i++) {
     const el = document.createElement("i");
     if (i % 3 === 0) { el.className = "dot"; }
@@ -346,7 +386,7 @@ function render() {
       : it.multi && it.brand
       ? `<div class="pic gc" style="--g:${grad}"><div class="card" style="--gc:${it.gc || "#555"}"><div class="brand">${esc(it.brand)}</div><div class="row2"><span>GIFT CARD</span><span class="e">${it.emoji || "🎁"}</span></div></div></div>`
       : `<div class="pic" style="--g:${grad}">${it.img ? `<img class="photo" src="${esc(it.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="sparkle s1">✨</span><span class="emoji">${it.emoji || "🎁"}</span><span class="sparkle s2">✨</span><span class="tag">${esc(it.tag || "")}</span>${taken && !it.multi ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`;
-    li.innerHTML = `${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}${it.quip ? `<div class="quip">${esc(it.quip)}</div>` : ""}<div class="right">${right}</div></div>`;
+    li.innerHTML = `<span class="num">No. ${String(ITEMS.indexOf(it) + 1).padStart(2, "0")}</span>${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}${it.quip ? `<div class="quip">${esc(it.quip)}</div>` : ""}<div class="right">${right}</div></div>`;
     listEl.appendChild(li);
   });
   if (!listEl.children.length) listEl.innerHTML = `<li class="empty">Nothing left here, everything is taken</li>`;
