@@ -228,13 +228,18 @@
     88% { opacity: .35; transform: scale(.7) rotate(35deg); }
   }
   .free { text-align: center; font-size: .66rem; letter-spacing: .22em; text-transform: uppercase; color: #6b1430; border-top: 1px solid rgba(107,20,48,.18); padding-top: 14px; }
+  .lang { position: absolute; top: 18px; right: 20px; display: flex; border: 1px solid rgba(217,189,139,.45); z-index: 5; }
+  .lang button { background: transparent; border: 0; color: rgba(247,236,223,.75); font: 500 .66rem Montserrat, sans-serif; letter-spacing: .2em; padding: 7px 10px; cursor: pointer; }
+  .lang button.on { background: #e6cc9c; color: #3d0c19; }
+  header { position: static; }
 </style>
 </head>
 <body>
 <div class="sparkles" id="sparkles"></div>
 <div class="wrap">
   <header>
-    <div class="kicker">Katja's</div>
+    <div class="lang" id="lang"><button data-l="en">EN</button><button data-l="ru">RU</button></div>
+    <div class="kicker" id="kicker">Katja's</div>
     <h1 id="title">Wishlist</h1>
     <p id="intro">Some things I've been wishing for. Found something you'd like to give me? Tap "I'll get this" so no one buys the same thing twice. Some gift cards can be given more than once, so they won't disappear from the list. And of course, you're always welcome to surprise me with something that's not on the list. Thank you, you're the best!</p>
     <div class="note" id="note">Once someone picks a gift, it disappears from the list, so it stays a surprise, even for me</div>
@@ -247,11 +252,11 @@
 
 <dialog id="dlg">
   <div class="dlgEmoji" id="dlgEmoji">🎁</div>
-  <h2>Is this your gift?</h2>
+  <h2 id="dlgTitle">Is this your gift?</h2>
   <p id="dlgItem"></p>
   <p style="font-size:.85rem" id="dlgHint"></p>
   <input id="dlgWhat" maxlength="50" style="display:none;width:100%;padding:12px 14px;border:1px solid #e9e0db;font:inherit;margin:0 0 6px;">
-  <p id="dlgErr" style="display:none;color:#a32d2d;font-size:.8rem;margin:0 0 10px;">Please type which game first / Напиши название игры</p>
+  <p id="dlgErr" style="display:none;color:#a32d2d;font-size:.8rem;margin:0 0 10px;">Please type which game first</p>
   <div class="row">
     <button id="dlgCancel">Cancel</button>
     <button id="dlgOk" class="primary">Yes, mark it</button>
@@ -277,7 +282,7 @@ const ITEMS = [
   { id: "blender", img: "https://assets.mmsrg.com/isr/166325/c1/-/ASSET_MMS_148824113/fee_786_587_png", emoji: "🥤", name: "Blender (Philips Series 3000 HR2041/41)", price: "€36", link: "https://www.mediamarkt.nl/nl/product/_philips-hr204141-1877332.html", note: "A surprising one from me, I know, but I'd love to make more creamy soups.", tag: "Kitchen" },
   { id: "desenio", img: "https://media.desenio.com/site_images/giftcard_white-large-nl.jpg?auto=compress,format&fit=max&w=800", brand: "Desenio", emoji: "🖼️", gc: "#9c8468", name: "Desenio gift card (posters and frames)", price: "Any amount", link: "https://desenio.nl/p/cadeaubon/cadeaubon/", note: "My walls are looking a little naked.", tag: "Gift card", multi: true },
   { id: "hema-pants", img: "https://static.hema.nl/dw/image/v2/BBRK_PRD/on/demandware.static/-/Sites-HEMA-master-catalog/default/dw06d60e28/product/23401972_01_001.webp?sw=800&sfrm=png", emoji: "🌙", name: "HEMA striped velours pyjama pants", price: "€19.99", link: "https://www.hema.nl/dames/nachtmode/pyjamabroek/damespyjamabroek-velours-strepen-donkerblauw-23401972DARKBLUE.html", note: "Size M, in dark blue, dark red or green. It's way too cold in my apartment and I'm saving on energy, so dressing warmer it is.", tag: "Cozy" },
-  { id: "fav-game", askWhat: "Which game? / Какую игру ты даришь?", fit: "cover", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Several people can pick this, just tell us which game you're getting.", tag: "Games", multi: true },
+  { id: "fav-game", askWhat: "Which game are you getting?", fit: "cover", img: "https://images.unsplash.com/photo-1629760946220-5693ee4c46ac?w=800&q=70&auto=format&fit=crop", emoji: "🎲", name: "Your favourite board or card game", price: "", link: "", note: "Give me a game you love and we'll play it together! Several people can pick this, just tell us which game you're getting.", tag: "Games", multi: true },
   { id: "laptop-stand", img: "https://m.media-amazon.com/images/I/71twLAB+YgL._AC_SX679_.jpg", emoji: "💻", name: "Laptop stand (Orionstar, aluminium)", price: "€29.99", link: "https://www.amazon.nl/dp/B08YDHLK7C", note: "Fits 10 to 15.6 inch laptops. My neck is gonna thank you.", tag: "Home" },
   { id: "strout-book", img: "https://m.media-amazon.com/images/I/81paxISMYbL._SY522_.jpg", emoji: "📖", name: "The Things We Never Say by Elizabeth Strout", price: "€16.77", link: "https://www.amazon.nl/dp/0241814308", tag: "Books" },
   { id: "coffee-beans", noClaim: true, fit: "cover", img: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=70&auto=format&fit=crop", emoji: "☕", name: "Specialty coffee beans", price: "Any amount", link: "", note: "Any specialty roaster you like. Whole beans please!", tag: "Kitchen", multi: true },
@@ -388,6 +393,28 @@ function confetti() {
 const reveal = () => [...listEl.children].forEach((li, i) => { li.style.animationDelay = Math.min(i, 8) * 50 + "ms"; });
 const matches = () => true;
 
+
+// ===== language =====
+const T = { en: {"kicker": "Katja's", "title": "Wishlist", "intro": "Some things I've been wishing for. Found something you'd like to give me? Tap \"I'll get this\" so no one buys the same thing twice. Some gift cards can be given more than once, so they won't disappear from the list. And of course, you're always welcome to surprise me with something that's not on the list. Thank you, you're the best!", "note": "Once someone picks a gift, it disappears from the list, so it stays a surprise, even for me", "claim": "I'll get this", "buy": "Buy here ↗", "yours": "✓ You're getting this", "undo": "Changed my mind, undo", "free": "No need to claim, just surprise me", "spoiler": "Spoiler: games already taken", "empty": "Nothing left here, everything is taken", "dlgTitle": "Is this your gift?", "hintMulti": "It stays on the list, and nobody can see who's getting it.", "hintSingle": "It will disappear from the list for everyone else. Only you will still see it here, so you can undo.", "cancel": "Cancel", "ok": "Yes, mark it", "ask": "Which game are you getting?", "err": "Please type which game first", "no": "No.", "stamp": "YOURS ✓", "tags": {"Gift card": "Gift card", "Experience": "Experience", "Gym": "Gym", "Kitchen": "Kitchen", "Beauty": "Beauty", "Cozy": "Cozy", "Games": "Games", "Home": "Home", "Books": "Books"}, "anyAmount": "Any amount"}, ru: {"kicker": "Катин", "title": "Вишлист", "intro": "Вещи, о которых я давно мечтаю. Нашли что-то, что хотите мне подарить? Нажмите «Я подарю это», чтобы никто не купил то же самое. Некоторые подарочные карты можно дарить несколько раз, поэтому они не исчезают из списка. И конечно, вы всегда можете удивить меня чем-то, чего здесь нет. Спасибо, вы лучшие!", "note": "Как только кто-то выбирает подарок, он исчезает из списка, так что для меня это останется сюрпризом", "claim": "Я подарю это", "buy": "Купить ↗", "yours": "✓ Это даришь ты", "undo": "Передумал(а), отменить", "free": "Отмечать не нужно, просто удивите меня", "spoiler": "Спойлер: эти игры уже выбраны", "empty": "Здесь ничего не осталось, всё уже выбрано", "dlgTitle": "Это твой подарок?", "hintMulti": "Он останется в списке, и никто не увидит, кто его дарит.", "hintSingle": "Для всех остальных он исчезнет из списка. Только ты будешь видеть его здесь, чтобы можно было отменить.", "cancel": "Отмена", "ok": "Да, отметить", "ask": "Какую игру ты даришь?", "err": "Сначала напиши название игры", "no": "№", "stamp": "ТВОЁ ✓", "tags": {"Gift card": "Подарочная карта", "Experience": "Впечатление", "Gym": "Спорт", "Kitchen": "Кухня", "Beauty": "Красота", "Cozy": "Уют", "Games": "Игры", "Home": "Дом", "Books": "Книги"}, "anyAmount": "Любая сумма"} };
+const RU_ITEMS = {"heuvelrug-horses": ["Прогулка верхом в Heuvelrug Horses (Лирсум)", "Очень хочу чаще кататься на природе, по лесу и вересковым полям."], "hairdryer": ["Фен с диффузором (Remington One Dry & Style D6077)", "Оказывается, у меня есть кудри. Пора наконец что-то с ними делать."], "catan": ["Catan, английская версия (настольная игра)", "Только английская версия, пожалуйста. Честно предупреждаю: буду менять овец на дерево."], "jysk": ["Подарочная карта JYSK", "Чтобы наконец доделать интерьер в квартире."], "robe": ["Тёплый уютный халат", "Размер M. Этот флисовый халат Hunkemöller просто пример (но если получится достать именно его, будет здорово!). Подойдёт любой тёплый халат, лучше всего коричневый, тёмно-зелёный или бордовый."], "london-book": ["Don't Be a Tourist in London (гид Messy Nessy)", "Для моей следующей поездки в Лондон. Обещаю привезти сувенир."], "tamper": ["Темпер 51 мм для моей кофемашины De'Longhi", "Нужен именно 51 мм, чтобы подошёл к машине, а бренд любой."], "studio-release": ["Массаж в Studio Release (Утрехт)", "Моя спина давно просит нормальный массаж."], "straps": ["Лямки для тяги / бинты на запястья", "Эти или похожие, не обязательно розовые! Я постоянно перенапрягаю запястья, так что они меня спасут."], "murdle": ["Murdle: Volume 1 (логические детективные загадки)", "100 логических загадок. Не волнуйтесь, убийства только вымышленные."], "blender": ["Блендер (Philips Series 3000 HR2041/41)", "Неожиданно от меня, знаю, но хочу чаще готовить крем-супы."], "desenio": ["Подарочная карта Desenio (постеры и рамки)", "Мои стены выглядят как-то пустовато."], "hema-pants": ["Бархатные полосатые пижамные штаны HEMA", "Размер M, тёмно-синие, тёмно-красные или зелёные. В квартире ужасно холодно, а я экономлю на отоплении, так что буду одеваться теплее."], "fav-game": ["Ваша любимая настольная или карточная игра", "Подарите игру, которую любите, и мы вместе в неё сыграем! Выбрать могут несколько человек, просто напишите, какую игру дарите."], "laptop-stand": ["Подставка для ноутбука (Orionstar, алюминий)", "Для ноутбуков от 10 до 15,6 дюйма. Моя шея скажет спасибо."], "strout-book": ["The Things We Never Say, Элизабет Страут", ""], "coffee-beans": ["Спешелти кофе в зёрнах", "Любая обжарка на ваш вкус. Только в зёрнах, пожалуйста!"], "puppy-book": ["Easy Peasy Puppy Squeezy, Стив Манн", "Мало кто об этом знает, но я думаю завести щенка в следующем году. Пора готовиться!"], "zara": ["Подарочная карта Zara", "Потому что одежды много не бывает (прости, экология)."], "mango": ["Подарочная карта Mango", "Потому что одежды много не бывает (прости, экология)."], "icaniwill": ["Подарочная карта ICANIWILL (одежда для зала)", "Чтобы мотивировать себя чаще ходить в зал."]};
+let lang = (() => { try { const l = localStorage.getItem("wishlist-lang"); if (l) return l; } catch {} return (navigator.language || "").toLowerCase().startsWith("ru") ? "ru" : "en"; })();
+const t = k => T[lang][k];
+const nm = it => lang === "ru" ? RU_ITEMS[it.id][0] : it.name;
+const nt = it => lang === "ru" ? RU_ITEMS[it.id][1] : it.note;
+const tg = it => T[lang].tags[it.tag] || it.tag || "";
+const pr = it => it.price === "Any amount" ? t("anyAmount") : it.price;
+function applyLang() {
+  document.documentElement.lang = lang;
+  ["kicker","title","intro","note"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = t(id); });
+  document.getElementById("dlgTitle").textContent = t("dlgTitle");
+  document.getElementById("dlgCancel").textContent = t("cancel");
+  document.getElementById("dlgOk").textContent = t("ok");
+  document.getElementById("dlgErr").textContent = t("err");
+  document.querySelectorAll("#lang button").forEach(b => b.classList.toggle("on", b.dataset.l === lang));
+}
+document.querySelectorAll("#lang button").forEach(b => b.onclick = () => { lang = b.dataset.l; try { localStorage.setItem("wishlist-lang", lang); } catch {} applyLang(); render(); });
+applyLang();
+
 function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
 
 function render() {
@@ -401,29 +428,29 @@ function render() {
     li.className = "item" + (!it.multi && myKey ? " claimed" : "");
     const taken = !it.multi && !!myKey;
     const metaBits = [
-      it.price && `<span class="price">${esc(it.price)}</span>`,
-      it.link && `<a href="${esc(it.link)}" target="_blank" rel="noopener">Buy here ↗</a>`,
+      it.price && `<span class="price">${esc(pr(it))}</span>`,
+      it.link && `<a href="${esc(it.link)}" target="_blank" rel="noopener">${t("buy")}</a>`,
     ].filter(Boolean).join(" · ");
     let right;
     const takenGames = it.askWhat ? c.map(x => x.by).filter(Boolean) : [];
-    const spoiler = takenGames.length ? `<details class="spoiler"><summary>Spoiler: games already taken (${takenGames.length})</summary><div>${takenGames.map(esc).join(", ")}</div></details>` : "";
+    const spoiler = takenGames.length ? `<details class="spoiler"><summary>${t("spoiler")} (${takenGames.length})</summary><div>${takenGames.map(esc).join(", ")}</div></details>` : "";
     if (it.noClaim) {
-      right = `<div class="free">No need to claim, just surprise me</div>`;
+      right = `<div class="free">${t("free")}</div>`;
     } else if (myKey) {
-      right = `<span class="status">✓ You're getting this</span><button class="undo" data-undo="${esc(myKey)}">Changed my mind, undo</button>`;
+      right = `<span class="status">${t("yours")}</span><button class="undo" data-undo="${esc(myKey)}">${t("undo")}</button>`;
     } else {
-      right = `<button class="claim" data-claim="${esc(it.id)}">I'll get this</button>`;
+      right = `<button class="claim" data-claim="${esc(it.id)}">${t("claim")}</button>`;
     }
     const grad = TAG_COLORS[it.tag] || TAG_COLORS.default;
     const pic = (it.logo || it.img)
-      ? `<div class="pic" style="--g:${grad}"><img class="photo${it.logo ? " logo" : ""}" src="${esc(it.logo || it.img)}" alt="${esc(it.brand || "")}" loading="lazy" style="${it.fit === "cover" ? "object-fit:cover;padding:0;mix-blend-mode:normal" : ""}" onerror="this.nextElementSibling.style.display='block';this.remove()"><span class="emoji" style="display:none">${it.emoji || "🎁"}</span><span class="tag">${esc(it.tag || "")}</span>${taken ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`
+      ? `<div class="pic" style="--g:${grad}"><img class="photo${it.logo ? " logo" : ""}" src="${esc(it.logo || it.img)}" alt="${esc(it.brand || "")}" loading="lazy" style="${it.fit === "cover" ? "object-fit:cover;padding:0;mix-blend-mode:normal" : ""}" onerror="this.nextElementSibling.style.display='block';this.remove()"><span class="emoji" style="display:none">${it.emoji || "🎁"}</span><span class="tag">${esc(tg(it))}</span>${taken ? `<span class="stamp">${t("stamp")}</span>` : ""}</div>`
       : it.multi && it.brand
       ? `<div class="pic gc" style="--g:${grad}"><div class="card" style="--gc:${it.gc || "#555"}"><div class="brand">${esc(it.brand)}</div><div class="row2"><span>GIFT CARD</span><span class="e">${it.emoji || "🎁"}</span></div></div></div>`
-      : `<div class="pic" style="--g:${grad}">${it.img ? `<img class="photo" src="${esc(it.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="sparkle s1">✨</span><span class="emoji">${it.emoji || "🎁"}</span><span class="sparkle s2">✨</span><span class="tag">${esc(it.tag || "")}</span>${taken && !it.multi ? `<span class="stamp">YOURS ✓</span>` : ""}</div>`;
-    li.innerHTML = `<span class="num">No. ${String(ITEMS.indexOf(it) + 1).padStart(2, "0")}</span>${pic}<div class="body"><div class="name">${esc(it.name)}</div><div class="meta">${metaBits}</div>${it.note ? `<div class="noteline">${esc(it.note)}</div>` : ""}${spoiler}${it.quip ? `<div class="quip">${esc(it.quip)}</div>` : ""}<div class="right">${right}</div></div>`;
+      : `<div class="pic" style="--g:${grad}">${it.img ? `<img class="photo" src="${esc(it.img)}" alt="" loading="lazy" onerror="this.remove()">` : ""}<span class="sparkle s1">✨</span><span class="emoji">${it.emoji || "🎁"}</span><span class="sparkle s2">✨</span><span class="tag">${esc(tg(it))}</span>${taken && !it.multi ? `<span class="stamp">${t("stamp")}</span>` : ""}</div>`;
+    li.innerHTML = `<span class="num">${t("no")} ${String(ITEMS.indexOf(it) + 1).padStart(2, "0")}</span>${pic}<div class="body"><div class="name">${esc(nm(it))}</div><div class="meta">${metaBits}</div>${nt(it) ? `<div class="noteline">${esc(nt(it))}</div>` : ""}${spoiler}${it.quip ? `<div class="quip">${esc(it.quip)}</div>` : ""}<div class="right">${right}</div></div>`;
     listEl.appendChild(li);
   });
-  if (!listEl.children.length) listEl.innerHTML = `<li class="empty">Nothing left here, everything is taken</li>`;
+  if (!listEl.children.length) listEl.innerHTML = `<li class="empty">${t("empty")}</li>`;
   reveal();
 }
 
@@ -434,13 +461,13 @@ listEl.addEventListener("click", async e => {
   if (cId) {
     pending = cId;
     const itm = ITEMS.find(i => i.id === cId);
-    document.getElementById("dlgItem").textContent = itm.name;
+    document.getElementById("dlgItem").textContent = nm(itm);
     const w = document.getElementById("dlgWhat");
-    w.style.display = itm.askWhat ? "block" : "none"; w.value = ""; w.placeholder = itm.askWhat || "";
+    w.style.display = itm.askWhat ? "block" : "none"; w.value = ""; w.placeholder = itm.askWhat ? t("ask") : "";
     document.getElementById("dlgErr").style.display = "none";
     document.getElementById("dlgHint").textContent = itm.multi
-      ? "It stays on the list, and nobody can see who's getting it."
-      : "It will disappear from the list for everyone else. Only you will still see it here, so you can undo.";
+      ? t("hintMulti")
+      : t("hintSingle");
     document.getElementById("dlgEmoji").textContent = itm.emoji || "🎁";
     dlg.showModal();
   }
